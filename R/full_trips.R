@@ -2469,72 +2469,72 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      "]")
                                               }
                                             }
-                                              capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
-                                                             file = "NUL")
-                                              if (length(current_elementarycatches) != 0) {
-                                                if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                            capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
+                                                           file = "NUL")
+                                            if (length(current_elementarycatches) != 0) {
+                                              if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                                stop(format(Sys.time(),
+                                                            "%Y-%m-%d %H:%M:%S"),
+                                                     " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
+                                                     "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
+                                                     "\n[trip: ",
+                                                     current_activity$.__enclos_env__$private$trip_id,
+                                                     ", activity: ",
+                                                     current_activity$.__enclos_env__$private$activity_id,
+                                                     "]")
+                                              }
+                                              else{
+                                                catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
+                                                                                       na.rm=TRUE)
+                                              }
+
+                                              if (catch_weight_category_corrected == 0) {
+                                                if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
+                                                        & is.na(x = current_elementarycatches$catch_count))) {
                                                   stop(format(Sys.time(),
                                                               "%Y-%m-%d %H:%M:%S"),
-                                                       " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
-                                                       "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
+                                                       " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
+                                                       "Check the data.",
                                                        "\n[trip: ",
                                                        current_activity$.__enclos_env__$private$trip_id,
                                                        ", activity: ",
                                                        current_activity$.__enclos_env__$private$activity_id,
                                                        "]")
+                                                } else {
+                                                  catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
                                                 }
-                                                else{
-                                                  catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
-                                                                                         na.rm=TRUE)
+                                                if(catch_count == 0){
+                                                  current_activity$.__enclos_env__$private$set_duration  <- 0
+                                                } else {
+                                                  current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
+                                                                                                                  digits=4)
                                                 }
-
-                                                if (catch_weight_category_corrected == 0) {
-                                                  if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
-                                                          & is.na(x = current_elementarycatches$catch_count))) {
-                                                    stop(format(Sys.time(),
-                                                                "%Y-%m-%d %H:%M:%S"),
-                                                         " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
-                                                         "Check the data.",
-                                                         "\n[trip: ",
-                                                         current_activity$.__enclos_env__$private$trip_id,
-                                                         ", activity: ",
-                                                         current_activity$.__enclos_env__$private$activity_id,
-                                                         "]")
-                                                  } else {
-                                                    catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
-                                                  }
-                                                  if(catch_count == 0){
-                                                    current_activity$.__enclos_env__$private$set_duration  <- 0
-                                                  } else {
-                                                    current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
-                                                                                                                    digits=4)
-                                                  }
-                                                } else{
-                                                  parameter_a <- current_set_duration_ref$parameter_a
-                                                  parameter_b <- current_set_duration_ref$parameter_b
-                                                  current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
-                                                                                                                 digits=4)
-                                                }
-
-                                              } else {
-                                                if ((referential_template == "observe"
-                                                     && (current_activity$.__enclos_env__$private$activity_code == 6
-                                                         & current_activity$.__enclos_env__$private$set_success_status_code == 1))
-                                                    | (referential_template == "avdth"
-                                                       && current_activity$.__enclos_env__$private$activity_code == 1)) {
-                                                  warning(format(Sys.time(),
-                                                                 "%Y-%m-%d %H:%M:%S"),
-                                                          " - Set declared as successful fishing operation but without elementary catch associated.",
-                                                          " Set duration define as null set value.",
-                                                          "\n[trip: ",
-                                                          current_trip$.__enclos_env__$private$trip_id,
-                                                          ", activity: ",
-                                                          current_activity$.__enclos_env__$private$activity_id,
-                                                          "]")
-                                                }
-                                                current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value,
+                                              } else{
+                                                parameter_a <- current_set_duration_ref$parameter_a
+                                                parameter_b <- current_set_duration_ref$parameter_b
+                                                current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
                                                                                                                digits=4)
                                               }
+
+                                            } else {
+                                              if ((referential_template == "observe"
+                                                   && (current_activity$.__enclos_env__$private$activity_code == 6
+                                                       & current_activity$.__enclos_env__$private$set_success_status_code == 1))
+                                                  | (referential_template == "avdth"
+                                                     && current_activity$.__enclos_env__$private$activity_code == 1)) {
+                                                warning(format(Sys.time(),
+                                                               "%Y-%m-%d %H:%M:%S"),
+                                                        " - Set declared as successful fishing operation but without elementary catch associated.",
+                                                        " Set duration define as null set value.",
+                                                        "\n[trip: ",
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", activity: ",
+                                                        current_activity$.__enclos_env__$private$activity_id,
+                                                        "]")
+                                              }
+                                              current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value,
+                                                                                                             digits=4)
+                                            }
 
                                           } else {
                                             current_activity$.__enclos_env__$private$set_duration <- 0.0
@@ -2604,7 +2604,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           # If only no fishing activities and fishing_time_declared > 0 create searching activity
                                           # to allocate fishing time recorded in observe after get it via activities query (not done yet)
                                         } else {
-                                        ## Date including fishing activities ---------------
+                                          ## Date including fishing activities ---------------
                                           ### No fishing activities -----------
                                           if(any(unique(x = current_code) %in% no_fishing_codes)) {
                                             capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
@@ -2760,7 +2760,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             capture.output(current_activities_date$add(new_item = new_activity),
                                                            file = "NUL")
 
-                                            }
+                                          }
 
                                           fishing_time <- fishing_time + fishing_time_tmp
                                         }
@@ -3133,6 +3133,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+                                    elementarysamples_id_removed <- NULL
                                     if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                       capture.output(current_activities <- object_r6(class_name = "activities"),
                                                      file = "NUL")
@@ -3510,9 +3511,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                           }
                                         } else {
+
                                           warning(format(Sys.time(),
                                                          "%Y-%m-%d %H:%M:%S"),
                                                   " - Well(s) detected with no elementary catch associated to the trip.\n",
+                                                  "Sample length class in FL (sample_length_class_lf) and the number of sample measured (sample_number_measured_lf) set to NA. \n",
                                                   "[trip_id: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   " (full trip item id ",
@@ -3527,6 +3530,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   paste(unlist(current_wells$extract_l1_element_value(element = "well_id_bis")),
                                                         collapse = ", "),
                                                   "]")
+                                          # Remove wrong samples ----
+                                          # Set to NA sample_length_class_lf and sample_number_measured_lf
+                                          # for Well(s) detected with no elementary catch associated to the trip
+                                          capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                                         file = "NUL")
+                                          capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                         file = "NUL")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_lf <- NA_real_")
+
                                         }
                                       }
                                     } else {
@@ -3535,11 +3548,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
-                                        current_elementarysamplesraw <- unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))
-                                        if (length(x = current_elementarysamplesraw) != 0) {
+                                        if (length(x = current_wells$extract_l1_element_value(element = "elementarysampleraw")) != 0) {
+
                                           warning(format(Sys.time(),
                                                          "%Y-%m-%d %H:%M:%S"),
-                                                  " - Sample(s) detected without any activity associated.\n",
+                                                  " - Sample(s) detected without any activity associated.\n
+                                                  Sample length class in FL (sample_length_class_lf) and the number of sample measured (sample_number_measured_lf) set to NA. \n",
                                                   "[trip_id: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   " (full trip item id ",
@@ -3547,6 +3561,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   "),\n trip item id ",
                                                   partial_trip_id,
                                                   ")]")
+                                          # Remove wrong samples ----
+                                          # Set to NA sample_length_class_lf and sample_number_measured_lf
+                                          # for sample(s) detected without any activity associated
+                                          capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                                         file = "NUL")
+                                          capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                         file = "NUL")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_lf <- NA_real_")
                                         }
                                       }
                                     }
@@ -4780,12 +4803,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       }
-                                    # ## Case of bait boat (BB) ---------------
-                                    # } else if(current_trip$.__enclos_env__$private$vessel_type_code %in% as.integer(x = c(1, 2, 12))){
-                                    #   # unique well and no well_plan all sets are in the same well
-                                    #
-                                    #
-                                    #   browser()
+                                      # ## Case of bait boat (BB) ---------------
+                                      # } else if(current_trip$.__enclos_env__$private$vessel_type_code %in% as.integer(x = c(1, 2, 12))){
+                                      #   # unique well and no well_plan all sets are in the same well
+                                      #
+                                      #
+                                      #   browser()
                                     } else{
                                       stop(format(Sys.time(),
                                                   "%Y-%m-%d %H:%M:%S"),
@@ -6055,11 +6078,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_standardised_samples_sets_plus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted"))
 
                                                 if(any(is.na(unlist(current_standardised_samples_sets$extract_l1_element_value(element="sample_weight_unit"))))){
-                                                capture.output(current_standardised_samples_sets_removed <- object_r6(class_name = "standardisedsamplesets"),
-                                                               file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_removed <- object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
                                                   stop()
-                                                capture.output(current_standardised_samples_sets_removed$add(new_item = current_standardised_samples_sets$filter_l1(filter = "is.na($path$sample_weight_unit)")),
-                                                               file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_removed$add(new_item = current_standardised_samples_sets$filter_l1(filter = "is.na($path$sample_weight_unit)")),
+                                                                 file = "NUL")
                                                 }
                                                 current_standardised_samples_sets$modification_l1(modification = "$path$sample_weight_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                               } else {
@@ -8786,16 +8809,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               latitude_tmp <- dplyr::bind_rows(lapply(1:nrow(set_all_output_wide),
                                                                       function(x){
-                                dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
-                              })) %>%
+                                                                        dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
+                                                                      })) %>%
                                 dplyr::rename(latitude_deg = "degrees",
-                                                    latitude_min = "minutes")
+                                              latitude_min = "minutes")
                               longitude_tmp <- dplyr::bind_rows(lapply(1:nrow(set_all_output_wide),
                                                                        function(x){
-                                dd2dms_posit(set_all_output_wide[x,]$longitude_dec)
-                              })) %>%
+                                                                         dd2dms_posit(set_all_output_wide[x,]$longitude_dec)
+                                                                       })) %>%
                                 dplyr::rename(longitude_deg = "degrees",
-                                                    longitude_min = "minutes")
+                                              longitude_min = "minutes")
                               set_all_output_wide <- dplyr::bind_cols(set_all_output_wide,
                                                                       dplyr::select(.data =latitude_tmp, -seconds),
                                                                       dplyr::select(.data =longitude_tmp, -seconds))
@@ -8936,7 +8959,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               t1_fmod <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
                                 dplyr::group_by(dplyr::across(dplyr::all_of(t1_fmod_column_names))) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE)) %>%
-                                  dplyr::ungroup()
+                                dplyr::ungroup()
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0
                                                 || length(which(ci_type == "t1-fmod")) > 0)) {
