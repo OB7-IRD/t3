@@ -15,6 +15,7 @@
 --
 -- Updates:
 -- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id

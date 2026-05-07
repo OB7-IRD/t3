@@ -18,6 +18,7 @@
 -- 2024-04-30 - M.Depetris - Update fleet argument to flag.
 -- 2025-04-14 - J.Clément - Fix typo (weigth insteaf of weight).
 -- 2026-01-29 - J.Clément - Add condition sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW') in sample's query.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id

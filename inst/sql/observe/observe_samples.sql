@@ -23,6 +23,7 @@
 -- 2025-04-14 - J.Clément - Fix typo (weigth insteaf of weight).
 -- 2026-01-29 - J.Clément - Add condition sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW') in sample's query.
 -- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 
 select
