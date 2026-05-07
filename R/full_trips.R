@@ -4459,7 +4459,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (! paste0(class(x = sample_set),
                                            collapse = "_") %in% c("data.frame",
                                                                   "tbl_df_tbl_data.frame")
-                                  || ncol(x = sample_set) != 7
+                                  || ncol(x = sample_set) != 6
                                   || nrow(x = sample_set) == 0) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),

@@ -1788,7 +1788,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                          is.na(well_id) & !is.na(well_label) ~  paste0("fr.ird.data.ps.logbook.Well#",
                                                                                                        trip_id, "#", well_label),
                                                          is.na(well_id) & is.na(well_label)  ~  NA_character_)) %>%
-                                         dplyr::relocate(well_id_source, .after=well_id)
+                                         dplyr::relocate(well_id_source, .after=well_id) %>%
+                                         dplyr::select(- well_label)
+
 
                                        sample_data <-  sample_data %>%
                                          dplyr::mutate(well_id_source = dplyr::if_else(!is.na(well_id),
@@ -1799,7 +1801,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                          is.na(well_id) & !is.na(well_label) ~  paste0("fr.ird.data.ps.logbook.Well#",
                                                                                                        trip_id, "#", well_label),
                                                          is.na(well_id) & is.na(well_label)  ~  NA_character_)) %>%
-                                         dplyr::relocate(well_id_source, .after=well_id)
+                                         dplyr::relocate(well_id_source, .after=well_id) %>%
+                                         dplyr::select(- well_label)
+
 
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -2623,6 +2627,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                          is.na(well_id) & !is.na(well_label) ~  paste0("fr.ird.data.ps.logbook.Well#",
                                                                                                        trip_id, "#", well_label),
                                                          is.na(well_id) & is.na(well_label)  ~  NA_character_)) %>%
+                                         dplyr::select(- well_label) %>%
                                          dplyr::relocate(well_id_source, .after=well_id)
 
                                      } else if (data_source == "avdth_database") {
