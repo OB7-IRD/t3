@@ -1,7 +1,7 @@
 Package: t3
 Type: Package
 Title: Tropical Tuna Treatment
-Version: 4.0.0
+Version: 4.0.1
 Authors@R:
     c(person(given = "Jeanne",
            family = "Clément",
