@@ -1,4 +1,4 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -7,7 +7,7 @@ articles:
   level_3: level_3.html
   model_initialisation: model_initialisation.html
   running_processes_examples: running_processes_examples.html
-last_built: 2026-04-27T19:34Z
+last_built: 2026-05-11T14:36Z
 urls:
   reference: https://ob7-ird.github.io/t3/reference
   article: https://ob7-ird.github.io/t3/articles

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class object_model_data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/object_model_data.R" class="external-link"><code>R/object_model_data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/object_model_data.R" class="external-link"><code>R/object_model_data.R</code></a></small>
     <div class="hidden name"><code>object_model_data.Rd</code></div>
     </div>
 
@@ -198,7 +198,7 @@ By default the referential table <code>data("observe_logbook_program", package="
 <dt><code>database_connection</code></dt>
 <dd><p>Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html" class="external-link">`furdeb::postgresql_dbconnection()`</a>.
-Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
+and mandatory argument for data source "avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.</p></dd>
 
