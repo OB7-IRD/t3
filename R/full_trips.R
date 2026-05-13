@@ -448,7 +448,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 6 - Add wells and samples ----
-                            #' @description Function for add wells and samples caracteristics in full trips object.
+                            #' @description Function for add wells and samples characteristics in full trips object.
                             #' @param object_wells Object of type R6-wells expected. A R6 reference object of class wells.
                             add_wells_samples = function(object_wells) {
 
@@ -2469,72 +2469,72 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      "]")
                                               }
                                             }
-                                              capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
-                                                             file = "NUL")
-                                              if (length(current_elementarycatches) != 0) {
-                                                if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                            capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
+                                                           file = "NUL")
+                                            if (length(current_elementarycatches) != 0) {
+                                              if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                                stop(format(Sys.time(),
+                                                            "%Y-%m-%d %H:%M:%S"),
+                                                     " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
+                                                     "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
+                                                     "\n[trip: ",
+                                                     current_activity$.__enclos_env__$private$trip_id,
+                                                     ", activity: ",
+                                                     current_activity$.__enclos_env__$private$activity_id,
+                                                     "]")
+                                              }
+                                              else{
+                                                catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
+                                                                                       na.rm=TRUE)
+                                              }
+
+                                              if (catch_weight_category_corrected == 0) {
+                                                if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
+                                                        & is.na(x = current_elementarycatches$catch_count))) {
                                                   stop(format(Sys.time(),
                                                               "%Y-%m-%d %H:%M:%S"),
-                                                       " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
-                                                       "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
+                                                       " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
+                                                       "Check the data.",
                                                        "\n[trip: ",
                                                        current_activity$.__enclos_env__$private$trip_id,
                                                        ", activity: ",
                                                        current_activity$.__enclos_env__$private$activity_id,
                                                        "]")
+                                                } else {
+                                                  catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
                                                 }
-                                                else{
-                                                  catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
-                                                                                         na.rm=TRUE)
+                                                if(catch_count == 0){
+                                                  current_activity$.__enclos_env__$private$set_duration  <- 0
+                                                } else {
+                                                  current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
+                                                                                                                  digits=4)
                                                 }
-
-                                                if (catch_weight_category_corrected == 0) {
-                                                  if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
-                                                          & is.na(x = current_elementarycatches$catch_count))) {
-                                                    stop(format(Sys.time(),
-                                                                "%Y-%m-%d %H:%M:%S"),
-                                                         " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
-                                                         "Check the data.",
-                                                         "\n[trip: ",
-                                                         current_activity$.__enclos_env__$private$trip_id,
-                                                         ", activity: ",
-                                                         current_activity$.__enclos_env__$private$activity_id,
-                                                         "]")
-                                                  } else {
-                                                    catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
-                                                  }
-                                                  if(catch_count == 0){
-                                                    current_activity$.__enclos_env__$private$set_duration  <- 0
-                                                  } else {
-                                                    current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
-                                                                                                                    digits=4)
-                                                  }
-                                                } else{
-                                                  parameter_a <- current_set_duration_ref$parameter_a
-                                                  parameter_b <- current_set_duration_ref$parameter_b
-                                                  current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
-                                                                                                                 digits=4)
-                                                }
-
-                                              } else {
-                                                if ((referential_template == "observe"
-                                                     && (current_activity$.__enclos_env__$private$activity_code == 6
-                                                         & current_activity$.__enclos_env__$private$set_success_status_code == 1))
-                                                    | (referential_template == "avdth"
-                                                       && current_activity$.__enclos_env__$private$activity_code == 1)) {
-                                                  warning(format(Sys.time(),
-                                                                 "%Y-%m-%d %H:%M:%S"),
-                                                          " - Set declared as successful fishing operation but without elementary catch associated.",
-                                                          " Set duration define as null set value.",
-                                                          "\n[trip: ",
-                                                          current_trip$.__enclos_env__$private$trip_id,
-                                                          ", activity: ",
-                                                          current_activity$.__enclos_env__$private$activity_id,
-                                                          "]")
-                                                }
-                                                current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value,
+                                              } else{
+                                                parameter_a <- current_set_duration_ref$parameter_a
+                                                parameter_b <- current_set_duration_ref$parameter_b
+                                                current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
                                                                                                                digits=4)
                                               }
+
+                                            } else {
+                                              if ((referential_template == "observe"
+                                                   && (current_activity$.__enclos_env__$private$activity_code == 6
+                                                       & current_activity$.__enclos_env__$private$set_success_status_code == 1))
+                                                  | (referential_template == "avdth"
+                                                     && current_activity$.__enclos_env__$private$activity_code == 1)) {
+                                                warning(format(Sys.time(),
+                                                               "%Y-%m-%d %H:%M:%S"),
+                                                        " - Set declared as successful fishing operation but without elementary catch associated.",
+                                                        " Set duration define as null set value.",
+                                                        "\n[trip: ",
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", activity: ",
+                                                        current_activity$.__enclos_env__$private$activity_id,
+                                                        "]")
+                                              }
+                                              current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value,
+                                                                                                             digits=4)
+                                            }
 
                                           } else {
                                             current_activity$.__enclos_env__$private$set_duration <- 0.0
@@ -2604,7 +2604,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           # If only no fishing activities and fishing_time_declared > 0 create searching activity
                                           # to allocate fishing time recorded in observe after get it via activities query (not done yet)
                                         } else {
-                                        ## Date including fishing activities ---------------
+                                          ## Date including fishing activities ---------------
                                           ### No fishing activities -----------
                                           if(any(unique(x = current_code) %in% no_fishing_codes)) {
                                             capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
@@ -2756,28 +2756,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                         digits=4)))
                                             ## Add new activity to current_trip object ---------
                                             current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                            ## Add new activity in current_activities_date object ------------
+                                            ## Add new activity to current_activities_date object ------------
                                             capture.output(current_activities_date$add(new_item = new_activity),
                                                            file = "NUL")
 
-                                            }
+                                          }
 
                                           fishing_time <- fishing_time + fishing_time_tmp
                                         }
-                                        # # Add in current_activities_date new activity created during the process in current_activities_date object ------------
-                                        # current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        # capture.output(current_activities <- object_r6(class_name = "activities"),
-                                        #                file = "NUL")
-                                        # capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
-                                        #                file = "NUL")
-                                        # capture.output(current_activities_date <- object_r6(class_name = "activities"),
-                                        #                file = "NUL")
-                                        # capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                        #                                                                                                    activities_dates[activities_dates_id],
-                                        #                                                                                                    "\",",
-                                        #                                                                                                    "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                        #                file = "NUL")
-                                        # time at sea calculation ####
                                         if (referential_template == "observe") {
                                           current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))
                                         } else {
@@ -2838,7 +2824,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              "%Y-%m-%d")))
                                             ## Add new activity to current_trip object ---------
                                             current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                            ## Add new activity in current_activities_date and current_activities_date_sea object ------------
+                                            ## Add new activity to current_activities_date and current_activities_date_sea object ------------
                                             capture.output(current_activities_date$add(new_item = new_activity),
                                                            file = "NUL")
                                             capture.output(current_activities_date_sea$add(new_item = new_activity),
@@ -2856,19 +2842,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
 
                                         }
-                                        # # Add in current_activities_date new activity created during the process in current_activities_date object ------------
-                                        # current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        # capture.output(current_activities <- object_r6(class_name = "activities"),
-                                        #                file = "NUL")
-                                        # capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
-                                        #                file = "NUL")
-                                        # capture.output(current_activities_date <- object_r6(class_name = "activities"),
-                                        #                file = "NUL")
-                                        # capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                        #                                                                                                    activities_dates[activities_dates_id],
-                                        #                                                                                                    "\",",
-                                        #                                                                                                    "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                        #                file = "NUL")
 
                                         # Searching time calculation ####
                                         for (current_activity_id in seq_len(length.out = current_activities_date$count())) {
@@ -3045,9 +3018,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 "level1",
                                                 "data"), "\n")
                                 }
-                                # cat(format(Sys.time(),
-                                #            "%Y-%m-%d %H:%M:%S"),
-                                #     " - End process 1.4: fishing effort indicators calculation.\n")
+                                #  End process 1.4: fishing effort indicators calculation.
                               }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
@@ -3066,7 +3037,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
+                            #'  process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -3075,7 +3046,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
@@ -3146,11 +3121,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 referential_size_measure_type_code <- if (referential_template == "observe") {c("FL", "PD1")} else {c("1", "2")}
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   cli::cli_progress_update()
-                                  # if (full_trip_id == 1) {
-                                  #   cat(format(Sys.time(),
-                                  #              "%Y-%m-%d %H:%M:%S"),
-                                  #       " - Start process 2.1: sample length class conversion ld1 to lf.\n")
-                                  # }
                                   if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     warning(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -3163,35 +3133,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                  #     capture.output(current_wells <- object_r6(class_name = "wells"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                  #                    file = "NUL")
-                                  #     if (length(x = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
-                                  #       capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_elementarysamplesraw$add(new_item = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
-                                  #                      file = "NUL")
-                                  #       current_elementarysamplesraw$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
-                                  #       current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_lf <- NA_integer_")
-                                  #     }
-                                  #   }
-                                  # } else {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 2.1 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
                                   for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+                                    elementarysamples_id_removed <- NULL
                                     if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                       capture.output(current_activities <- object_r6(class_name = "activities"),
                                                      file = "NUL")
@@ -3259,6 +3203,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                                       collapse = "\", \""),"\")"))),
 
                                                                  file = "NUL")
+                                                  well_topiaid <- unique(unlist(current_sample_size_measure_type_wrong$extract_l1_element_value(element="well_id")))
                                                   warning(format(Sys.time(),
                                                                  "%Y-%m-%d %H:%M:%S"),
                                                           " - Value(s) for the variable \"size_measure_type_code\" not added yet in the function code. Check the following value(s): ",
@@ -3272,7 +3217,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           ", trip item id ",
                                                           partial_trip_id,
                                                           "), \n well_id: ",
-                                                          unique(unlist(current_sample_size_measure_type_wrong$extract_l1_element_value(element="well_id"))),
+                                                          well_topiaid,
                                                           " (well item id ",
                                                           well_id,
                                                           ") ,\n sample_id: ",
@@ -3559,9 +3504,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                           }
                                         } else {
+
                                           warning(format(Sys.time(),
                                                          "%Y-%m-%d %H:%M:%S"),
                                                   " - Well(s) detected with no elementary catch associated to the trip.\n",
+                                                  "Sample length class in FL (sample_length_class_lf) and the number of sample measured (sample_number_measured_lf) set to NA. \n",
                                                   "[trip_id: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   " (full trip item id ",
@@ -3572,6 +3519,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   paste(unlist(current_wells$extract_l1_element_value(element = "well_id")),
                                                         collapse = ", "),
                                                   "]")
+                                          # Remove wrong samples ----
+                                          # Set to NA sample_length_class_lf and sample_number_measured_lf
+                                          # for Well(s) detected with no elementary catch associated to the trip
+                                          capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                                         file = "NUL")
+                                          capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                         file = "NUL")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_lf <- NA_real_")
+
                                         }
                                       }
                                     } else {
@@ -3580,11 +3537,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
-                                        current_elementarysamplesraw <- unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))
-                                        if (length(x = current_elementarysamplesraw) != 0) {
+                                        if (length(x = current_wells$extract_l1_element_value(element = "elementarysampleraw")) != 0) {
+
                                           warning(format(Sys.time(),
                                                          "%Y-%m-%d %H:%M:%S"),
-                                                  " - Sample(s) detected without any activity associated.\n",
+                                                  " - Sample(s) detected without any activity associated.\n
+                                                  Sample length class in FL (sample_length_class_lf) and the number of sample measured (sample_number_measured_lf) set to NA. \n",
                                                   "[trip_id: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   " (full trip item id ",
@@ -3592,19 +3550,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   "),\n trip item id ",
                                                   partial_trip_id,
                                                   ")]")
+                                          # Remove wrong samples ----
+                                          # Set to NA sample_length_class_lf and sample_number_measured_lf
+                                          # for sample(s) detected without any activity associated
+                                          capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                                         file = "NUL")
+                                          capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                         file = "NUL")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
+                                          current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_lf <- NA_real_")
                                         }
                                       }
                                     }
                                   }
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Process 2.1 successfull on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
-                                  #}
                                 }
                                 T2 <- Sys.time()
                                 elapsed_time <- format(round(T2-T1,2), units="secs")
@@ -3662,6 +3620,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
 
                                   outputs_process_2_1_wellplan <- dplyr::distinct(data.frame("well_id"= unlist(wellplans_selected$extract_l1_element_value(element = "well_id")),
+                                                                                             "well_id_source"= unlist(wellplans_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                              "school_type_code" = unlist(wellplans_selected$extract_l1_element_value(element = " school_type_code"))))
                                   outputs_process_2_1_wellplan <-  outputs_process_2_1_wellplan %>%
                                     dplyr::group_by(well_id) %>%
@@ -3670,6 +3629,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                        "MIX"))
                                   outputs_process_2_1_elementarysamplesraw <- data.frame("trip_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "trip_id")),
                                                                                          "well_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "well_id")),
+                                                                                         "well_id_source" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                          "sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_id")),
                                                                                          "sub_sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sub_sample_id")),
                                                                                          "elementarysampleraw_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "elementarysampleraw_id")),
@@ -3691,6 +3651,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code,
                                                     well_id,
+                                                    well_id_source,
                                                     school_type_code)
                                   # extraction
                                   outputs_dec <- "."
@@ -3727,7 +3688,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
+                            #'  process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 19 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -3736,7 +3697,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
@@ -3794,33 +3759,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                  #     capture.output(current_wells <- object_r6(class_name = "wells"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                  #                    file = "NUL")
-                                  #     if (length(x = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
-                                  #       capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_elementarysamplesraw$add(new_item = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
-                                  #                      file = "NUL")
-                                  #       current_elementarysamplesraw$modification_l1(modification = "$path$rf4 <- NA_real_")
-                                  #       current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_extrapolated_lf <- NA")
-                                  #     }
-                                  #   }
-                                  # } else {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 2.2 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
                                   for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                     if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -4011,6 +3949,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
 
                                   outputs_process_2_2_wellplan <- dplyr::distinct(data.frame("well_id"= unlist(wellplans_selected$extract_l1_element_value(element = "well_id")),
+                                                                                             "well_id_source"= unlist(wellplans_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                              "school_type_code" = unlist(wellplans_selected$extract_l1_element_value(element = " school_type_code"))))
                                   outputs_process_2_2_wellplan <-  outputs_process_2_2_wellplan %>%
                                     dplyr::group_by(well_id) %>%
@@ -4019,6 +3958,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                        "MIX"))
                                   outputs_process_2_2_elementarysamplesraw <- data.frame("trip_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "trip_id")),
                                                                                          "well_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "well_id")),
+                                                                                         "well_id_source" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                          "sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_id")),
                                                                                          "sub_sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sub_sample_id")),
                                                                                          "sub_sample_total_count_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sub_sample_total_count_id")),
@@ -4041,6 +3981,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code,
                                                     well_id,
+                                                    well_id_source,
                                                     school_type_code)
                                   # extraction
                                   outputs_dec <- "."
@@ -4061,9 +4002,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 "data"), "\n",
                                       sep = "")
                                 }
-                                # cat(format(x = Sys.time(),
-                                #            "%Y-%m-%d %H:%M:%S"),
-                                #     " - End process 2.2: sample number measured extrapolation.\n")
+                                # End process 2.2: sample number measured extrapolation.
                               }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
@@ -4080,7 +4019,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_3: a table (.csv) with as many rows as elementary samples, and 17 columns:
+                            #'  process_2_3: a table (.csv) with as many rows as elementary samples, and 18 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -4089,7 +4028,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
@@ -4151,28 +4094,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                  #     capture.output(current_wells <- object_r6(class_name = "wells"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                  #                    file = "NUL")
-                                  #     if (length(x = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
-                                  #       current_wells$modification_l1(modification = "$path$elementarysample <- NA")
-                                  #     }
-                                  #   }
-                                  # } else {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 2.3 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
                                   for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                     if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -4221,6 +4142,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 for (elementarysamplesraw_id in seq_len(length.out = current_sample_specie$count())) {
                                                   object_elementarysample <- elementarysample$new(trip_id = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$trip_id,
                                                                                                   well_id = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                  well_id_source = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$well_id_source,
                                                                                                   sample_id = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sample_id,
                                                                                                   sub_sample_id = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sub_sample_id,
                                                                                                   sample_quality_code = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sample_quality_code,
@@ -4257,6 +4179,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      file = "NUL")
                                                       object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
                                                                                                       well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                      well_id_source = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id_source,
                                                                                                       sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
                                                                                                       sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
                                                                                                       sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
@@ -4317,6 +4240,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      file = "NUL")
                                                       object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
                                                                                                       well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                      well_id_source = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id_source,
                                                                                                       sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
                                                                                                       sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
                                                                                                       sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
@@ -4414,6 +4338,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
 
                                   outputs_process_2_3_wellplan <- dplyr::distinct(data.frame("well_id"= unlist(wellplans_selected$extract_l1_element_value(element = "well_id")),
+                                                                                             "well_id_source"= unlist(wellplans_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                              "school_type_code" = unlist(wellplans_selected$extract_l1_element_value(element = " school_type_code"))))
                                   outputs_process_2_3_wellplan <-  outputs_process_2_3_wellplan %>%
                                     dplyr::group_by(well_id) %>%
@@ -4423,6 +4348,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                   outputs_process_2_3_elementarysamples <- data.frame("trip_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "trip_id")),
                                                                                       "well_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "well_id")),
+                                                                                      "well_id_source" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                       "sample_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_id")),
                                                                                       "sample_type_code" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_type_code")),
                                                                                       "sample_quality_code" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_quality_code")),
@@ -4444,6 +4370,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code,
                                                     well_id,
+                                                    well_id_source,
                                                     school_type_code)
                                   # extraction
                                   outputs_dec <- "."
@@ -4486,13 +4413,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{PWW: } is the proportional weighted weight,
                             #'  \item{\eqn{WW_{i,j}}{WW_ij}: } is the weighted weight of the current set i in well j.
                             #'  }
-                            #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
+                            #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weight of each set sampled.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_4: a table (.csv) with as many rows as elementary samples, and 13 columns:
+                            #'  process_2_4: a table (.csv) with as many rows as elementary samples, and 14 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -4501,7 +4428,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -4528,11 +4459,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (! paste0(class(x = sample_set),
                                            collapse = "_") %in% c("data.frame",
                                                                   "tbl_df_tbl_data.frame")
-                                  || ncol(x = sample_set) != 5
+                                  || ncol(x = sample_set) != 6
                                   || nrow(x = sample_set) == 0) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"sample_set\" argument, class \"data.frame\" or \"tibble\" with 5 columns and at least 1 row expected.")
+                                     " - Invalid \"sample_set\" argument, class \"data.frame\" or \"tibble\" with 6 columns and at least 1 row expected.")
                               }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -4560,14 +4491,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       ", Time remaining:{cli::pb_eta}"),
                                                       total =  length(private$data_selected))
                                 for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 2.4 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
                                   cli::cli_progress_update()
                                   if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     warning(format(Sys.time(),
@@ -4581,20 +4504,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                  #     capture.output(current_wells <- object_r6(class_name = "wells"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                  #                    file = "NUL")
-                                  #     current_wells$modification_l1(modification = "$path$wellsets <- NA")
-                                  #   }
-                                  # } else {
                                   for (partial_trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+
+                                    ## Case for purse seiner (PS) ---------------
                                     if (current_trip$.__enclos_env__$private$vessel_type_code %in% as.integer(x = c(4, 5, 6))) {
                                       if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
                                         capture.output(current_wells <- object_r6(class_name = "wells"),
@@ -4629,6 +4542,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                         for (well_id in seq_len(length.out = current_wells$count())) {
                                           current_well <- current_wells$extract(id = well_id)[[1]]
+                                          ### Case of well plan recorded -------
                                           # information from the well plan
                                           # do we have a well plan associated to the current well ?
                                           if (length(x = current_well$.__enclos_env__$private$wellplan) != 0) {
@@ -4637,7 +4551,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
                                                            file = "NUL")
-                                            # calcul of proportion of minus and plus 10 kg
+                                            # Calculation of minus and plus 10 kg proportion
                                             current_wellplan_weight_category <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "weight_category_code")))
                                             if (referential_template == "observe") {
                                               current_wellplan_weight_category <- stringr::str_extract(string = current_wellplan_weight_category,
@@ -4647,7 +4561,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             well_prop_minus10_weight <- 0
                                             well_prop_plus10_weight <- 0
                                             well_prop_global_weight <- 0
-                                            if (! any(current_wellplan_weight_category %in% as.integer(x = c(8, 9)))) {
+                                            if (!any(current_wellplan_weight_category %in% as.integer(x = c(8, 9)))) {
                                               for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
                                                 current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
                                                 current_well_plan_weight_category_code <- if (referential_template == "observe") {as.integer(x = stringr::str_extract(string = current_well_plan$.__enclos_env__$private$weight_category_code,
@@ -4707,6 +4621,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             activity_id = activity_id,
                                                                                                             school_type_code =  current_school_type_code,
                                                                                                             well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                            well_id_source = current_well$.__enclos_env__$private$well_id_source,
                                                                                                             sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
                                                                                                             weighted_weight = current_weighted_weight,
                                                                                                             weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weight,
@@ -4786,6 +4701,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             activity_id = current_well_activitie_id,
                                                                                                             school_type_code = current_school_type_code,
                                                                                                             well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                            well_id_source = current_well$.__enclos_env__$private$well_id_source,
                                                                                                             sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
                                                                                                             weighted_weight = current_weighted_weight,
                                                                                                             weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weight,
@@ -4798,6 +4714,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
                                                                                                     sum_weighted_weight))
                                           } else {
+                                            ### Case of no well plan recored -------
                                             # no well plan available for the current well
                                             warning(format(Sys.time(),
                                                            "%Y-%m-%d %H:%M:%S"),
@@ -4809,6 +4726,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     "]")
                                             current_well$.__enclos_env__$private$well_prop_minus10_weight <- current_well$.__enclos_env__$private$well_minus10_weight / (current_well$.__enclos_env__$private$well_minus10_weight + current_well$.__enclos_env__$private$well_plus10_weight)
                                             current_well$.__enclos_env__$private$well_prop_plus10_weight <- current_well$.__enclos_env__$private$well_plus10_weight / (current_well$.__enclos_env__$private$well_minus10_weight + current_well$.__enclos_env__$private$well_plus10_weight)
+
                                             if (is.na(current_well$.__enclos_env__$private$well_id)) {
                                               # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
                                               sample_set_well <- dplyr::filter(.data = sample_set,
@@ -4830,14 +4748,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
                                                              file = "NUL")
                                               for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
-                                                capture.output(current_trip <- object_r6(class_name = "trips"),
+                                                capture.output(current_trip_object <- object_r6(class_name = "trips"),
                                                                file = "NUL")
-                                                capture.output(current_trip$add(new_item = private$data_selected[[full_trip_id]][[partial_trip_id]]),
+                                                capture.output(current_trip_object$add(new_item = private$data_selected[[full_trip_id]][[partial_trip_id]]),
                                                                file = "NUL")
-                                                if (length(x = current_trip$extract_l1_element_value(element = "activities")) != 0) {
+                                                if (length(x = current_trip_object$extract_l1_element_value(element = "activities")) != 0) {
                                                   capture.output(current_activities <- object_r6(class_name = "activities"),
                                                                  file = "NUL")
-                                                  capture.output(current_activities$add(new_item = unlist(current_trip$extract_l1_element_value(element = "activities"))),
+                                                  capture.output(current_activities$add(new_item = unlist(current_trip_object$extract_l1_element_value(element = "activities"))),
                                                                  file = "NUL")
                                                   capture.output(current_activity <- object_r6(class_name = "activities"),
                                                                  file = "NUL")
@@ -4853,6 +4771,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             activity_id = sample_set_well$activity_id[[sample_set_well_id]],
                                                                                                             school_type_code = current_school_type_code,
                                                                                                             well_id = sample_set_well$well_id[[sample_set_well_id]],
+                                                                                                            well_id_source = sample_set_well$well_id_source[[sample_set_well_id]],
                                                                                                             sample_id = sample_set_well$sample_id[[sample_set_well_id]],
                                                                                                             weighted_weight = sample_set_well$well_set_weighted_weight[[sample_set_well_id]],
                                                                                                             weighted_weight_minus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_minus10_weight,
@@ -4867,24 +4786,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       }
-                                    } else {
+                                      # ## Case of bait boat (BB) ---------------
+                                      # } else if(current_trip$.__enclos_env__$private$vessel_type_code %in% as.integer(x = c(1, 2, 12))){
+                                      #   # unique well and no well_plan all sets are in the same well
+                                      #
+                                      #
+                                      #   browser()
+                                    } else{
                                       stop(format(Sys.time(),
                                                   "%Y-%m-%d %H:%M:%S"),
                                            " - Process not available for this vessel type.\n",
                                            "[trip: ",
                                            current_trip$.__enclos_env__$private$trip_id,
                                            "]")
+
                                     }
                                   }
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Process 2.4 successfull on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
-                                  #}
+                                  # Process 2.4 successfull on item
                                 }
                                 T2 <- Sys.time()
                                 elapsed_time <- format(round(T2-T1,2), units="secs")
@@ -4944,6 +4862,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_4_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
+                                                                             "well_id_source" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id_source")),
                                                                              "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
                                                                              "school_type_code" = unlist(x = wellsets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "weighted_weight_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_minus10")),
@@ -4981,7 +4900,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 19 - Process 2.5: standardised_sample_creation ----
-                            #' @description Object standardised sample creation.
+                            #' @description Object standardized sample creation.
                             #' This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data.
                             #' In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF).
                             #' This step create a new object called standardized sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the species.
@@ -4989,7 +4908,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_5: a table (.csv) with as many rows as standardized samples, and 12 columns:
+                            #'  process_2_5: a table (.csv) with as many rows as standardized samples, and 13 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -4998,7 +4917,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
                             #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
@@ -5133,6 +5056,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  file = "NUL")
                                                   current_standardisedsample <- standardisedsample$new(trip_id = current_well$.__enclos_env__$private$trip_id,
                                                                                                        well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                       well_id_source = current_well$.__enclos_env__$private$well_id_source,
                                                                                                        sample_id = unique(x = unlist(x = current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_id"))),
                                                                                                        sample_quality_code = as.integer(x = current_elementarysamples_sample_quality_id),
                                                                                                        sample_type_code = as.integer(x = current_elementarysamples_sample_type_id),
@@ -5223,6 +5147,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_5_standardisedsamples <- data.frame("trip_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "trip_id")),
                                                                                         "well_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "well_id")),
+                                                                                        "well_id_source" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                         "sample_id" = dplyr::tibble("sample_id_ori"= standardisedsamples_selected$extract_l1_element_value(element = "sample_id")) %>%
                                                                                           dplyr::rowwise() %>%
                                                                                           dplyr::mutate(sample_id_final = paste0(sample_id_ori,
@@ -5283,7 +5208,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_6: a table (.csv) with as many rows as , and 17 columns:
+                            #'  process_2_6: a table (.csv) with as many rows as , and 18 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -5292,7 +5217,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -5362,26 +5291,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                  #     capture.output(current_wells <- object_r6(class_name = "wells"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                  #                    file = "NUL")
-                                  #     current_wells$modification_l1(modification = "$path$standardisedsampleset <- NA")
-                                  #   }
-                                  # } else {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 2.6 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
                                   for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                     capture.output(current_activities <- object_r6(class_name = "activities"),
@@ -5463,6 +5372,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              activity_id = current_well_set$.__enclos_env__$private$activity_id,
                                                                                                              school_type_code = current_well_set$.__enclos_env__$private$school_type_code,
                                                                                                              well_id = current_well_set$.__enclos_env__$private$well_id,
+                                                                                                             well_id_source = current_well_set$.__enclos_env__$private$well_id_source,
                                                                                                              sample_id = current_standardised_sample$.__enclos_env__$private$sample_id,
                                                                                                              sample_quality_code = current_standardised_sample$.__enclos_env__$private$sample_quality_code,
                                                                                                              sample_type_code = current_standardised_sample$.__enclos_env__$private$sample_type_code,
@@ -5556,6 +5466,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_6_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "well_id_source" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
                                                                                            "school_type_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                            "sample_id" =  dplyr::tibble("sample_id_ori"= standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")) %>%
@@ -5640,7 +5551,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_7: a table (.csv) with as many rows as , and 14 columns:
+                            #'  process_2_7: a table (.csv) with as many rows as , and 15 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -5649,7 +5560,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -5722,40 +5637,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                  #     capture.output(current_wells <- object_r6(class_name = "wells"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                  #                    file = "NUL")
-                                  #     if (length(x = current_wells$filter_l1(filter = "all(class($path$wellsets) == c(\"wellsets\", \"list_t3\", \"R6\"))")) != 0) {
-                                  #       capture.output(current_wells_bis <- object_r6(class_name = "wells"),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_wells_bis$add(new_item = current_wells$filter_l1(filter = "all(class($path$wellsets) == c(\"wellsets\", \"list_t3\", \"R6\"))")),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_wellsets <- object_r6(class_name = "wellsets"),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_wellsets$add(new_item = current_wells_bis$extract_l1_element_value(element = "wellsets")),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_wellsets_bis <- object_r6(class_name = "wellsets"),
-                                  #                      file = "NUL")
-                                  #       capture.output(current_wellsets_bis$add(new_item = unlist(current_wellsets$extract_l1_element_value(element = "data"))),
-                                  #                      file = "NUL")
-                                  #       current_wellsets_bis$modification_l1(modification = "$path$rf_validation <- NA_integer_")
-                                  #     }
-                                  #   }
-                                  # } else {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 2.7 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
                                   for (partial_trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                     if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -5965,6 +5846,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_7_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
+                                                                             "well_id_source" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id_source")),
                                                                              "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
                                                                              "school_type_code" = unlist(x = wellsets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "weighted_samples_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_minus10")),
@@ -6009,7 +5891,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #'  If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_8: a table (.csv) with as many rows as , and 15 columns:
+                            #'  process_2_8: a table (.csv) with as many rows as , and 16 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -6018,7 +5900,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{well_id: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{well_id_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
                             #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -6171,11 +6057,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_standardised_samples_sets_plus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted"))
 
                                                 if(any(is.na(unlist(current_standardised_samples_sets$extract_l1_element_value(element="sample_weight_unit"))))){
-                                                capture.output(current_standardised_samples_sets_removed <- object_r6(class_name = "standardisedsamplesets"),
-                                                               file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_removed <- object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
                                                   stop()
-                                                capture.output(current_standardised_samples_sets_removed$add(new_item = current_standardised_samples_sets$filter_l1(filter = "is.na($path$sample_weight_unit)")),
-                                                               file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_removed$add(new_item = current_standardised_samples_sets$filter_l1(filter = "is.na($path$sample_weight_unit)")),
+                                                                 file = "NUL")
                                                 }
                                                 current_standardised_samples_sets$modification_l1(modification = "$path$sample_weight_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                               } else {
@@ -6266,6 +6152,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_8_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "well_id_source" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
                                                                                            "school_type_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                            "sample_id" = dplyr::tibble("sample_id_ori"= standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")) %>%
@@ -6383,9 +6270,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{type} sample type identification code, type {\link[base]{integer}}. \cr
                             #'  For example in Observe referential, a sample with \code{type=1} corresponds to a "At landing" sample.
                             #'  }
-                            #'  \item{wp: } a data.frame with 6 columns:
+                            #'  \item{wp: } a data.frame with 7 columns:
                             #'  \itemize{
-                            #'  \item{id_well} well identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  #'  \item{id_well: } well identification. type \code{\link[base]{character}}.
+                            #'  For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
+                            #'  if it is missing, the well ID is generated by the t3 process, as follows: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label".
+                            #'  For the AVDTH database, well identification is always generated by T3 process such as: well_id="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" .
+                            #' \item{id_well_source: } source of the well identification, type \code{\link[base]{character}}: "Observe" if the topiaid field from Observe database is used or "T3" if the the well ID is generated by the t3 process.
                             #'  \item{id_act: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{id_sample: } sample identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{code3l: } species FAO code, type \code{\link[base]{character}}.
@@ -6567,6 +6458,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       capture.output(current_wellplans$add(new_item = unlist(current_wells$extract_l1_element_value(element = "wellplan"))),
                                                      file = "NUL")
                                       tmp_elementarywellplan <- list(id_well = unlist(current_wellplans$extract_l1_element_value(element = "well_id")),
+                                                                     id_well_source = unlist(current_wellplans$extract_l1_element_value(element = "well_id_source")),
                                                                      id_act = unlist(current_wellplans$extract_l1_element_value(element = "activity_id")),
                                                                      id_sample = unlist(current_wellplans$extract_l1_element_value(element = "sample_id")),
                                                                      code3l = unlist(current_wellplans$extract_l1_element_value(element = "species_fao_code")),
@@ -6813,7 +6705,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     # well plan
                                     dataset_target$wp[[x]] <- data_level3[[1]]$wp
 
-                                    # hamonize activity code between avdth and observe new_catch code = 906
+                                    # harmonize activity code between avdth and observe new_catch code = 906
                                     # DEV need to be remove when activity code is standardized previously to level3 ----
                                     if(dataset_target$catch_set_lb[[x]]$code_act_type[1] == 1){
                                       dataset_target$catch_set_lb[[x]]$code_act_type = 906
@@ -8896,16 +8788,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               latitude_tmp <- dplyr::bind_rows(lapply(1:nrow(set_all_output_wide),
                                                                       function(x){
-                                dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
-                              })) %>%
+                                                                        dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
+                                                                      })) %>%
                                 dplyr::rename(latitude_deg = "degrees",
-                                                    latitude_min = "minutes")
+                                              latitude_min = "minutes")
                               longitude_tmp <- dplyr::bind_rows(lapply(1:nrow(set_all_output_wide),
                                                                        function(x){
-                                dd2dms_posit(set_all_output_wide[x,]$longitude_dec)
-                              })) %>%
+                                                                         dd2dms_posit(set_all_output_wide[x,]$longitude_dec)
+                                                                       })) %>%
                                 dplyr::rename(longitude_deg = "degrees",
-                                                    longitude_min = "minutes")
+                                              longitude_min = "minutes")
                               set_all_output_wide <- dplyr::bind_cols(set_all_output_wide,
                                                                       dplyr::select(.data =latitude_tmp, -seconds),
                                                                       dplyr::select(.data =longitude_tmp, -seconds))
@@ -9046,7 +8938,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               t1_fmod <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
                                 dplyr::group_by(dplyr::across(dplyr::all_of(t1_fmod_column_names))) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE)) %>%
-                                  dplyr::ungroup()
+                                dplyr::ungroup()
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0
                                                 || length(which(ci_type == "t1-fmod")) > 0)) {

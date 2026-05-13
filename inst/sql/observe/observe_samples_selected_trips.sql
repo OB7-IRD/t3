@@ -18,10 +18,12 @@
 -- 2024-04-30 - M.Depetris - Update fleet argument to flag.
 -- 2025-04-14 - J.Clément - Fix typo (weigth insteaf of weight).
 -- 2026-01-29 - J.Clément - Add condition sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW') in sample's query.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
 	,w.topiaid::text as well_id
+	,s.well::text as well_label
 	,s.smallsweight::numeric as well_minus10_weight
 	,s.bigsweight::numeric as well_plus10_weight
 	,s.totalweight::numeric as well_global_weight
@@ -53,7 +55,7 @@ from
 	join ps_common.sampletype st on (s.sampletype = st.topiaid)
 	join common.species sp on (ss.species = sp.topiaid)
 	join common.sizemeasuretype smt on (ss.sizemeasuretype = smt.topiaid)
-	left join ps_logbook.well w on (t.topiaid = w.trip and s.well = w.well)
+	left join ps_logbook.well w on (s.trip = w.trip and s.well = w.well)
 where
 	t.topiaid in (?trip_ids)
 	and sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')

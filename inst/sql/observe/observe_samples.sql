@@ -23,11 +23,14 @@
 -- 2025-04-14 - J.Clément - Fix typo (weigth insteaf of weight).
 -- 2026-01-29 - J.Clément - Add condition sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW') in sample's query.
 -- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 
 select
 	t.topiaid::text as trip_id
+	,vt.code::integer as vessel_type_code
 	,w.topiaid::text as well_id
+	,s.well::text as well_label
 	,s.smallsweight::numeric as well_minus10_weight
 	,s.bigsweight::numeric as well_plus10_weight
 	,s.totalweight::numeric as well_global_weight
@@ -59,7 +62,7 @@ from
 	join ps_common.sampletype st on (s.sampletype = st.topiaid)
 	join common.species sp on (ss.species = sp.topiaid)
 	join common.sizemeasuretype smt on (ss.sizemeasuretype = smt.topiaid)
-	left join ps_logbook.well w on (t.topiaid = w.trip and s.well = w.well)
+	left join ps_logbook.well w on (s.trip = w.trip and s.well = w.well)
 	left join ps_common.program prog on (t.logbookprogram = prog.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period

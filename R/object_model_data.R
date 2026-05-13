@@ -111,7 +111,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                               "character",
                                                                               "character",
                                                                               "character"))
-                                      observe_logbookprogram_codes <- observe_logbook_program %>%
+                                       observe_logbookprogram_codes <- observe_logbook_program %>%
                                          dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
@@ -186,10 +186,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      paste0(vessel_type_codes,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")),
-                                                                                observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                     paste0(observe_logbookprogram_codes,
-                                                                                                                            collapse = "', '"),
-                                                                                                                     "'")))
+                                                                                 observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                paste0(observe_logbookprogram_codes,
+                                                                                                                                       collapse = "', '"),
+                                                                                                                                "'")))
                                          }
                                          cat("[",
                                              trip_sql_final,
@@ -380,7 +380,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 landing_well_content_code = trip_data$landing_well_content_code[trip_id],
                                                                                 vessel_code = trip_data$vessel_code[trip_id],
                                                                                 vessel_type_code = trip_data$vessel_type_code[trip_id],
-                                                                                ocean_code = trip_data$ocean_code[trip_id])
+                                                                                ocean_code = as.integer(trip_data$ocean_code[trip_id]))
                                                                return(trip)
                                                              }))
                                      private$trips <- object_trips
@@ -397,7 +397,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
                                    #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
-                                   #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+                                   #' and mandatory argument for data source "avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
                                    #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param weight_categories_avdth_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
@@ -515,6 +515,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                stringsAsFactors = FALSE,
                                                                                colClasses = c("character",
                                                                                               "character",
+                                                                                              "character",
                                                                                               "character"))
                                          }
                                          codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
@@ -626,10 +627,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                    observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                                       paste0(observe_logbookprogram_codes,
-                                                                                                                                               collapse = "', '"),
-                                                                                                                                       "'")))
+                                                                                     observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                    paste0(observe_logbookprogram_codes,
+                                                                                                                                           collapse = "', '"),
+                                                                                                                                    "'")))
                                            elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                              "observe",
                                                                                                              "observe_elementarycatches.sql",
@@ -655,10 +656,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 paste0(vessel_type_codes,
                                                                                                                                        collapse = "', '"),
                                                                                                                                 "'")),
-                                                                                           observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                                              paste0(observe_logbookprogram_codes,
-                                                                                                                                                      collapse = "', '"),
-                                                                                                                                              "'")),
+                                                                                            observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                           paste0(observe_logbookprogram_codes,
+                                                                                                                                                  collapse = "', '"),
+                                                                                                                                           "'")),
                                                                                             species_fate_codes = DBI::SQL(paste0("'",
                                                                                                                                  paste0(species_fate_codes,
                                                                                                                                         collapse = "', '"),
@@ -1193,6 +1194,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                              stringsAsFactors = FALSE,
                                                                              colClasses = c("character",
                                                                                             "character",
+                                                                                            "character",
                                                                                             "character"))
                                        }
                                        codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
@@ -1279,10 +1281,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                   paste0(vessel_type_codes,
                                                                                                                                          collapse = "', '"),
                                                                                                                                   "'")),
-                                                                                             observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                                                paste0(observe_logbookprogram_codes,
-                                                                                                                                                        collapse = "', '"),
-                                                                                                                                                "'")))
+                                                                                              observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                             paste0(observe_logbookprogram_codes,
+                                                                                                                                                    collapse = "', '"),
+                                                                                                                                             "'")))
                                          }
                                          cat("[",
                                              elementarylanding_sql_final,
@@ -1576,9 +1578,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          observe_logbook_program <- read.csv(file = system.file("observe_logbook_program.csv",
                                                                                                 package = "t3"),
                                                                              stringsAsFactors = FALSE,
-                                                                             colClasses = c("character",
-                                                                                            "character",
-                                                                                            "character"))
+                                                                             colClasses = "character")
                                        }
                                        codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
                                                                 type="data.frame",
@@ -1667,10 +1667,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                        paste0(sample_type_codes,
                                                                                                                               collapse = "', '"),
                                                                                                                        "'")),
-                                                                                  observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                                     paste0(observe_logbookprogram_codes,
-                                                                                                                                             collapse = "', '"),
-                                                                                                                                     "'")))
+                                                                                   observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                  paste0(observe_logbookprogram_codes,
+                                                                                                                                         collapse = "', '"),
+                                                                                                                                  "'")))
                                          }
                                          cat("[",
                                              sample_sql_final,
@@ -1752,10 +1752,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                    observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                                       paste0(observe_logbookprogram_codes,
-                                                                                                                                               collapse = "', '"),
-                                                                                                                                       "'")))
+                                                                                     observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                    paste0(observe_logbookprogram_codes,
+                                                                                                                                           collapse = "', '"),
+                                                                                                                                    "'")))
                                          }
                                          cat("[",
                                              wellplan_sql_final,
@@ -1777,6 +1777,34 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Successful well plan(s) data importation from observe database(s).\n", sep="")
                                        }
+                                       ## Add well_id as : fr.ird.data.ps.logbook.Well#trip_id#well_label ----------------
+                                       # for cases with missing well topiaid from Observe (old PS data from AVDTH migration and BB)
+                                       wellplan_data <-  wellplan_data %>%
+                                         dplyr::mutate(well_id_source = dplyr::if_else(!is.na(well_id),
+                                                                                       "Observe",
+                                                                                       "T3"),
+                                                       well_id = dplyr::case_when(
+                                                         !is.na(well_id) ~ well_id,
+                                                         is.na(well_id) & !is.na(well_label) ~  paste0("fr.ird.data.ps.logbook.Well#",
+                                                                                                       trip_id, "#", well_label),
+                                                         is.na(well_id) & is.na(well_label)  ~  NA_character_)) %>%
+                                         dplyr::relocate(well_id_source, .after=well_id) %>%
+                                         dplyr::select(- well_label)
+
+
+                                       sample_data <-  sample_data %>%
+                                         dplyr::mutate(well_id_source = dplyr::if_else(!is.na(well_id),
+                                                                                       "Observe",
+                                                                                       "T3"),
+                                                       well_id = dplyr::case_when(
+                                                         !is.na(well_id) ~ well_id,
+                                                         is.na(well_id) & !is.na(well_label) ~  paste0("fr.ird.data.ps.logbook.Well#",
+                                                                                                       trip_id, "#", well_label),
+                                                         is.na(well_id) & is.na(well_label)  ~  NA_character_)) %>%
+                                         dplyr::relocate(well_id_source, .after=well_id) %>%
+                                         dplyr::select(- well_label)
+
+
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
                                        # specific argument verification
@@ -1838,7 +1866,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        size_measure_type_code = as.character(size_measure_type_code),
                                                        sample_total_count = as.integer(sample_total_count),
                                                        sample_number_measured = as.integer(sample_number_measured),
-                                                       sample_length_class = as.numeric(sample_length_class))
+                                                       sample_length_class = as.numeric(sample_length_class),
+                                                       # Add well_id_source
+                                                       well_id_source = "T3")
+
                                        if (nrow(x = sample_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -1896,7 +1927,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        species_fao_code = as.character(species_fao_code),
                                                        wellplan_weight = as.numeric(wellplan_weight),
                                                        weight_category_code = as.character(weight_category_code),
-                                                       weight_category_label = as.character(weight_category_label))
+                                                       weight_category_label = as.character(weight_category_label),
+                                                       # Add well_id_source
+                                                       well_id_source = "T3")
+
                                        if (nrow(x = wellplan_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -2060,30 +2094,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                            total = length(unique(x = sample_data$trip_id)))
                                      T1 <- Sys.time()
                                      for (trip_id in unique(x = sample_data$trip_id)) {
-                                       # cat(format(x = Sys.time(),
-                                       #            format = "%Y-%m-%d %H:%M:%S"),
-                                       #     " - Start importation of well(s) data for trip element ",
-                                       #     which(x = unique(x = sample_data$trip_id) == trip_id),
-                                       #     ".\n",
-                                       #     "[trip: ",
-                                       #     trip_id,
-                                       #     "]\n")
+
+                                       #  Start importation of well(s) data for trip element
 
                                        tmp_trip <- dplyr::filter(.data = sample_data,
                                                                  trip_id == !!trip_id)
                                        for (well_id in unique(x = tmp_trip$well_id)) {
-                                         # cat(format(x = Sys.time(),
-                                         #            format = "%Y-%m-%d %H:%M:%S"),
-                                         #     " - Start importation of well data item ",
-                                         #     which(x = unique(tmp_trip$well_id) == well_id),
-                                         #     ".\n",
-                                         #     "[well: ",
-                                         #     well_id,
-                                         #     "]\n", sep="")
                                          if (is.na(x = well_id)) {
+                                           #  ## Case for bait boat (BB) ---------------
+                                           # if(unique(x = tmp_trip$vessel_type_code) %in% c(1,2,12)){
+                                           #   tmp_well <- dplyr::filter(.data = tmp_trip,
+                                           #                             is.na(well_id))
+                                           # } else if(unique(x = tmp_trip$vessel_type_code) %in% c(4,5,6)){
+                                           ## Case for purse seiner (PS) --------------
                                            warning(format(x = Sys.time(),
                                                           format = "%Y-%m-%d %H:%M:%S"),
-                                                   " - Missing \"well_id\" argument in trip number: \"",
+                                                   " - Missing \"well_id\" argument in trip: \"",
                                                    trip_id,
                                                    "\".")
                                            tmp_well <- dplyr::filter(.data = tmp_trip,
@@ -2091,10 +2117,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            if (length(x = unique(x = tmp_well$sample_id)) != 1) {
                                              warning(format(x = Sys.time(),
                                                             format = "%Y-%m-%d %H:%M:%S"),
-                                                     " - Well unknown identify in trip number \"",
+                                                     " - Well unknown identifier in trip : \"",
                                                      trip_id,
-                                                     "\" have more than one sampling associated.\n",
-                                                     "Data avoided for model incrementation.")
+                                                     "\".\n Trip has more than one sample associated.
+                                                     Data is skipped for t3 process.\n")
                                              next()
                                            }
                                          } else {
@@ -2106,27 +2132,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              | length(unique(x = tmp_well$well_global_weight)) != 1) {
                                            warning(format(x = Sys.time(),
                                                           format = "%Y-%m-%d %H:%M:%S"),
-                                                   " - At least one well data (\"well_minus10_weight\", \"well_plus10_weight\" and \"well_global_weight\") is different between well samples. Only the first element will use.\n",
+                                                   " - At least one well data (\"well_minus10_weight\", \"well_plus10_weight\" and \"well_global_weight\") is different between well samples. Only the first element will be used.\n",
                                                    "[trip: ",
                                                    trip_id,
                                                    ", well: ",
-                                                   well_id,
+                                                   unique(x = tmp_well$well_id)[[1]],
                                                    "]")
                                          }
                                          object_well <- well$new(trip_id = trip_id,
-                                                                 well_id = well_id,
+                                                                 well_id = unique(x = tmp_well$well_id)[[1]],
+                                                                 well_id_source =  unique(x = tmp_well$well_id_source)[[1]],
                                                                  well_minus10_weight = unique(x = tmp_well$well_minus10_weight)[[1]],
                                                                  well_plus10_weight = unique(x = tmp_well$well_plus10_weight)[[1]],
                                                                  well_global_weight = unique(x = tmp_well$well_global_weight[[1]]))
                                          for (sample_id in unique(x = tmp_well$sample_id)) {
-                                           # cat(format(x = Sys.time(),
-                                           #            format = "%Y-%m-%d %H:%M:%S"),
-                                           #     " - Start importation of sample data item ",
-                                           #     which(x = unique(tmp_well$sample_id) == sample_id),
-                                           #     ".\n",
-                                           #     "[sample: ",
-                                           #     sample_id,
-                                           #     "]\n", sep="")
                                            tmp_sample <- dplyr::filter(.data = tmp_well,
                                                                        sample_id == !!sample_id)
                                            tmp_sample <- unclass(x = tmp_sample)
@@ -2135,6 +2154,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          FUN = function(i) {
                                                                                                                            elementarysampleraw$new(trip_id = trip_id,
                                                                                                                                                    well_id = well_id,
+                                                                                                                                                   well_id_source = unique(x = tmp_well$well_id_source)[[1]],
                                                                                                                                                    sample_id = sample_id,
                                                                                                                                                    sub_sample_id = tmp_sample$sub_sample_id[i],
                                                                                                                                                    sub_sample_total_count_id = tmp_sample$sub_sample_total_count_id[i],
@@ -2147,23 +2167,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                    sample_number_measured = tmp_sample$sample_number_measured[i],
                                                                                                                                                    sample_length_class = tmp_sample$sample_length_class[i])
                                                                                                                          })))
-                                           # cat(format(x = Sys.time(),
-                                           #            format = "%Y-%m-%d %H:%M:%S"),
-                                           #     " - Successful importation of sample data item ",
-                                           #     which(x = unique(x = tmp_well$sample_id) == sample_id),
-                                           #     ".\n",
-                                           #     "[sample: ",
-                                           #     sample_id,
-                                           #     "]\n", sep="")
+                                           # Successful importation of sample data item
                                          }
-                                         # cat(format(x = Sys.time(),
-                                         #            format = "%Y-%m-%d %H:%M:%S"),
-                                         #     " - Start importation of well plan data item ",
-                                         #     which(x = unique(x = wellplan_data$well_id) == well_id),
-                                         #     ".\n",
-                                         #     "[well: ",
-                                         #     well_id,
-                                         #     "]\n", sep="")
+                                         #  Start importation of well plan data item
                                          tmp_wellplan <- dplyr::filter(.data = wellplan_data,
                                                                        well_id == !!well_id)
                                          tmp_wellplan <- unclass(x = tmp_wellplan)
@@ -2171,6 +2177,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                 FUN = function(j) {
                                                                                                   elementarywellplan$new(wellplan_id = tmp_wellplan$wellplan_id[j],
                                                                                                                          well_id = tmp_wellplan$well_id[j],
+                                                                                                                         well_id_source = tmp_wellplan$well_id_source[j],
                                                                                                                          activity_id = tmp_wellplan$activity_id[j],
                                                                                                                          school_type_code = tmp_wellplan$school_type_code[j],
                                                                                                                          sample_id = tmp_wellplan$sample_id[j],
@@ -2180,23 +2187,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          weight_category_label = tmp_wellplan$weight_category_label[j])
                                                                                                 })
                                          object_wells$add(object_well)
-                                         # cat(format(x = Sys.time(),
-                                         #            format = "%Y-%m-%d %H:%M:%S"),
-                                         #     " - Successful importation of well data item ",
-                                         #     which(x = unique(x = tmp_trip$well_id) == well_id),
-                                         #     ".\n",
-                                         #     "[well: ",
-                                         #     well_id,
-                                         #     "]\n", sep="")
+                                         # Successful importation of well data item
                                        }
-                                       # cat(format(x = Sys.time(),
-                                       #            format = "%Y-%m-%d %H:%M:%S"),
-                                       #     " - Successful importation of well(s) data for trip element ",
-                                       #     which(x = unique(x = sample_data$trip_id) == trip_id),
-                                       #     ".\n",
-                                       #     "[trip: ",
-                                       #     trip_id,
-                                       #     "]\n", sep="")
+
+                                       # Successful importation of well(s) data for trip element
+
                                        cli::cli_progress_update()
                                      }
                                      T2 <- Sys.time()
@@ -2596,10 +2591,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           paste0(vessel_type_codes,
                                                                                                                                  collapse = "', '"),
                                                                                                                           "'")),
-                                                                                     observe_logbookprogram_codes = DBI::SQL(paste0("'",
-                                                                                                                                        paste0(observe_logbookprogram_codes,
-                                                                                                                                                collapse = "', '"),
-                                                                                                                                        "'")))
+                                                                                      observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                     paste0(observe_logbookprogram_codes,
+                                                                                                                                            collapse = "', '"),
+                                                                                                                                     "'")))
                                          }
                                          cat("[",
                                              sampleset_sql_final,
@@ -2621,6 +2616,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Successful sample set(s) data importation from observe database(s).\n")
                                        }
+                                       ## Add well_id as : fr.ird.data.ps.logbook.Well#trip_id#well_label ----------------
+                                       # for cases with missing well topiaid in Observe (old PS data from AVDTH migration and BB)
+                                       sampleset_data <-  sampleset_data %>%
+                                         dplyr::mutate(well_id_source = dplyr::if_else(!is.na(well_id),
+                                                                                       "Observe",
+                                                                                       "T3"),
+                                                       well_id = dplyr::case_when(
+                                                         !is.na(well_id) ~ well_id,
+                                                         is.na(well_id) & !is.na(well_label) ~  paste0("fr.ird.data.ps.logbook.Well#",
+                                                                                                       trip_id, "#", well_label),
+                                                         is.na(well_id) & is.na(well_label)  ~  NA_character_)) %>%
+                                         dplyr::select(- well_label) %>%
+                                         dplyr::relocate(well_id_source, .after=well_id)
+
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
                                        # specific argument verification
@@ -2666,7 +2675,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        activity_id = as.character(activity_id),
                                                        well_id = as.character(well_id),
                                                        sample_id = as.character(sample_id),
-                                                       well_set_weighted_weight = as.numeric(well_set_weighted_weight))
+                                                       well_set_weighted_weight = as.numeric(well_set_weighted_weight),
+                                                       ## Add well_id_source -----------
+                                                       well_id_source = "T3") %>%
+                                         dplyr::relocate(well_id_source, .after=well_id)
+
                                        if (nrow(x = sampleset_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -2676,6 +2689,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Successful sample set(s) data importation from avdht database.\n")
                                        }
+
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning

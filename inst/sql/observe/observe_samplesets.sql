@@ -20,9 +20,11 @@
 -- 2024-04-30 - M.Depetris - Update fleet argument to flag.
 -- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
 -- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
+	,s.well::text as well_label
 	,a.topiaid::text as activity_id
 	,w.topiaid::text as well_id
 	,sa.sample::text as sample_id

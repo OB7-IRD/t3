@@ -1,3 +1,9 @@
+# t3 4.0.0 - 2026-05-11
+
+## Changed
+
+* Handle missing wellplan in Observe by generating the well ID in t3 process, such as: well_id="fr.ird.data.ps.logbook.Well#trip_id#well_label", in the case of missing topiaid for this well in the table ps_logbook.well in Observe database. 
+
 # t3 4.0.0 - 2026-04-24
 
 ## Changed

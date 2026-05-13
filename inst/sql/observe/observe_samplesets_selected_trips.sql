@@ -15,11 +15,14 @@
 --
 -- Updates:
 -- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
+	,vt.code::integer as vessel_type_code
 	,a.topiaid::text as activity_id
 	,w.topiaid::text as well_id
+	,s.well::text as well_label
 	,sa.sample::text as sample_id
 	,sa.weightedweight::numeric as well_set_weighted_weight
 from

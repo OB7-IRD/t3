@@ -15,11 +15,14 @@
 --
 -- Updates:
 -- 2025-10-23 - J.Clément - Add school type code in outputs.
+-- 2026-05-04 - J.Clément - Add well_label in outputs.
 ----------------------------------------------------------------------------------------------------------------------------
 
 select
 	was.topiaid::text as wellplan_id
 	,w.topiaid:: text as well_id
+	,w.well::text as well_label
+	,t.topiaid::text as trip_id
 	,a.topiaid::text as activity_id
 	,sc.code::text as school_type_code
 	,sc.label1::text as school_type_label
