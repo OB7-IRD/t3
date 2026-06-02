@@ -2906,7 +2906,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               current_trip$.__enclos_env__$private$trip_id,
                                               "]\n",
                                               paste0("[activity: ",
-                                                     activities_104$activity_id,
+                                                     activities_105$activity_id,
                                                      collapse="];\n"),
                                               "].")
                                     }
@@ -8286,11 +8286,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                  vessel = factor(vessel),
                                                                                                                                  data_source = "not_fitted")
 
-                                          sampled_set <- unique(sample_data[sample_data$year %in% sets_long_fishing_mode_no_sample$yr[1],])
+                                          sampled_set <- unique(sample_data[sample_data$year %in% sets_long_fishing_mode$yr[1],])
                                           sampled_set$data_source <- "sample" # add flag
                                           sampled_set <- dplyr::rename(sampled_set,
                                                                        fit_prop = prop_t3)
-                                          all_set_bet <- dplyr::bind_rows(sampled_set, sets_long_fishing_mode_no_sample)
+                                          all_set_bet <- dplyr::bind_rows(sampled_set,
+                                                                          sets_long_fishing_mode_no_sample)
                                           # filter flag
                                           all_set_bet <- all_set_bet %>% dplyr::filter(flag_code == country_flag)
 
@@ -8563,11 +8564,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(data.frame(degrees = abs(degrees), minutes = abs(minutes), seconds = abs(seconds)))
                               }
                               # Compute CI by set - export catch by set
-                              set_all<- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
+                              set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
                                 dplyr::mutate(ci_inf = NA,ci_sup = NA)
 
-                              if (ci == TRUE && (length(which(ci_type == "all")) > 0
-                                                 || length(which(ci_type == "set")) > 0 )) {
+                              if (ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "set")) > 0 )) {
                                 set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST,
                                                        function(x) {
                                                          set_all_boot_tmp <- dplyr::bind_rows(x)
@@ -8685,7 +8685,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if(!(nrow(set_all)+nrow(catch_all_other)) == nrow(set_all_output)){
                                 warning("Duplicated detected in 'Catch_set_detail'")
                               }
-                              test_dupli <- set_all_output %>% dplyr::group_by(id_act, sp, data_source) %>% dplyr::mutate(dupli = dplyr::n())
+                              test_dupli <- set_all_output %>%
+                                dplyr::group_by(id_act, sp, data_source) %>%
+                                dplyr::mutate(dupli = dplyr::n())
                               if(any(test_dupli$dupli>1)){
                                 warning("Duplicated catch species data in activities, check 'Catch_set_detail'")
                               }
@@ -8802,15 +8804,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       dplyr::select(.data =latitude_tmp, -seconds),
                                                                       dplyr::select(.data =longitude_tmp, -seconds))
                               set_all_output_wide <- set_all_output_wide %>%
-                                dplyr::group_by(NUMBAT,date_act) %>%
+                                dplyr::group_by(NUMBAT, date_act) %>%
                                 dplyr::mutate(numero_activite = seq(1:dplyr::n())) %>%
                                 dplyr::ungroup()
 
-                              set_all_output_wide <- Add_multi_columns(df = set_all_output_wide, name_list = name_list_ecd) %>%
-                                dplyr::relocate(id_act, name_list_ecd) %>%
-                                dplyr::mutate(date_act = NULL, latitude_dec = NULL,	longitude_dec = NULL) %>%
-                                replace(is.na(.), 0)
-                              # export dataset
+                              set_all_output_wide <- Add_multi_columns(df = set_all_output_wide,
+                                                                       name_list = name_list_ecd) %>%
+                                dplyr::relocate(id_act,
+                                                .before=name_list_ecd) %>%
+                                dplyr::mutate(date_act = NULL,
+                                              latitude_dec = NULL,
+                                              longitude_dec = NULL) %>%
+                                replace(is.na((.)), 0)
+
+                              # export datasets
                               write.table(x = set_all_output_long,
                                           file = file.path(table_directory,
                                                            paste("Catch_set_ocean_",
@@ -8850,6 +8857,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: set catch estimations.\n",
                                   sep = "")
+
                               ### nominal catch by species (task 1) ----
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t1 catch estimations.\n",
@@ -8980,7 +8988,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               t1_fmod <- dplyr::bind_rows(t1_fmod, t1_fmod_other) %>%
                                 dplyr::mutate(status = ifelse(is.na(status), "catch", status)) %>%
-                                dplyr::group_by(across(t1_fmod_column_names), status, ocean) %>%
+                                dplyr::group_by(across(dplyr::all_of(t1_fmod_column_names)), status, ocean) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE),
                                                  catch_ci_inf = sum(ci_inf, na.rm = TRUE),
                                                  catch_ci_sup = sum(ci_sup, na.rm = TRUE))
