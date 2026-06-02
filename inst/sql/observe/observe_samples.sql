@@ -62,7 +62,7 @@ from
 	join ps_common.sampletype st on (s.sampletype = st.topiaid)
 	join common.species sp on (ss.species = sp.topiaid)
 	join common.sizemeasuretype smt on (ss.sizemeasuretype = smt.topiaid)
-	left join ps_logbook.well w on (s.trip = w.trip and s.well = w.well)
+	left join ps_logbook.well w on (t.topiaid  = w.trip and s.well = w.well)
 	left join ps_common.program prog on (t.logbookprogram = prog.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
