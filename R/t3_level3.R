@@ -80,7 +80,11 @@ t3_level3 <- function(inputs_level3,
           " - Start function t3 process level 3.\n",
       sep="")
   # methodes initialisation
-  object_full_trips <- full_trips$new()
+  if (is.null(periode_reference_level3)) {
+    periode_reference_level3 <- seq.int(from = target_year,
+                                        to = target_year - period_duration)
+  }
+  object_full_trips <- t3:::full_trips$new()
   # level 3.1: data preparatory
   process_level3 <- object_full_trips$data_preparatory(inputs_level3 = inputs_level3,
                                                        inputs_level3_path = inputs_level3_path,

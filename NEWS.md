@@ -27,7 +27,7 @@
   * Change the ocean_code of activity and elementarycatch from the trip's ocean to the real ocean of the activity defined by its longitude.
   * Handle case with missing activities coordinates, the ocean of the trip is then considered. 
   * Add by default in query parameters the multiple ocean code (99). 
-  * Rename the column "ocean_code" in .csv outputs as "activity_ocean_code" (and trip_ocean_code). + correct doc
+  * Rename the column "ocean_code" in .csv outputs as "activity_ocean_code" and "trip_ocean_code". 
   * Change ocean label from full name to three letter code: "Atlantic" ~ "ATL", "Indian" ~ "IND", "Pacific" ~ "PAC", "Multiple" ~ "MIX".  
 
 # t3 3.0.7 - 2026-01-29
