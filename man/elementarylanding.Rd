@@ -8,60 +8,59 @@ Create R6 reference object class elementarylanding
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-elementarylanding-new}{\code{elementarylanding$new()}}
-\item \href{#method-elementarylanding-clone}{\code{elementarylanding$clone()}}
-}
+  \itemize{
+    \item \href{#method-elementarylanding-initialize}{\code{elementarylanding$new()}}
+    \item \href{#method-elementarylanding-clone}{\code{elementarylanding$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-elementarylanding-new"></a>}}
-\if{latex}{\out{\hypertarget{method-elementarylanding-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 elementarylanding class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarylanding$new(
+\if{html}{\out{<a id="method-elementarylanding-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarylanding-initialize}{}}}
+\subsection{\code{elementarylanding$new()}}{
+  Initialize function for R6 elementarylanding class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarylanding$new(
   trip_id,
   elementarylanding_id,
   weight_category_code,
   weight_category_label,
   species_fao_code,
   landing_weight
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
+      \item{\code{elementarylanding_id}}{Object of class {\link[base]{character}} expected. Elementary landing identification.}
+      \item{\code{weight_category_code}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
+      \item{\code{weight_category_label}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
+      \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Species code identification on 3 characters.}
+      \item{\code{landing_weight}}{Object of class {\link[base]{numeric}} expected. Landing weight in tonnes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
-
-\item{\code{elementarylanding_id}}{Object of class {\link[base]{character}} expected. Elementary landing identification.}
-
-\item{\code{weight_category_code}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
-
-\item{\code{weight_category_label}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
-
-\item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Species code identification on 3 characters.}
-
-\item{\code{landing_weight}}{Object of class {\link[base]{numeric}} expected. Landing weight in tonnes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarylanding-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarylanding-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarylanding$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{elementarylanding$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarylanding$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

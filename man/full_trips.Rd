@@ -9,7 +9,7 @@ Create R6 reference object class full_trips
 \examples{
 
 ## ------------------------------------------------
-## Method `full_trips$path_to_level3`
+## Method `full_trips$path_to_level3()`
 ## ------------------------------------------------
 
 \dontrun{
@@ -17,149 +17,158 @@ process_level3 <- object_full_trips$path_to_level3(global_output_path = final_ou
 }
 }
 \section{Super class}{
-\code{\link[t3:list_t3]{t3::list_t3}} -> \code{full_trips}
+\code{\link[t3:list_t3]{list_t3}} -> \code{full_trips}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
-\item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
-\item \href{#method-full_trips-filter_by_years_period}{\code{full_trips$filter_by_years_period()}}
-\item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
-\item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
-\item \href{#method-full_trips-rf1}{\code{full_trips$rf1()}}
-\item \href{#method-full_trips-conversion_weight_category}{\code{full_trips$conversion_weight_category()}}
-\item \href{#method-full_trips-set_count}{\code{full_trips$set_count()}}
-\item \href{#method-full_trips-fishing_effort}{\code{full_trips$fishing_effort()}}
-\item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
-\item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
-\item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
-\item \href{#method-full_trips-well_set_weight_categories}{\code{full_trips$well_set_weight_categories()}}
-\item \href{#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
-\item \href{#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
-\item \href{#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
-\item \href{#method-full_trips-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}
-\item \href{#method-full_trips-path_to_level3}{\code{full_trips$path_to_level3()}}
-\item \href{#method-full_trips-data_preparatory}{\code{full_trips$data_preparatory()}}
-\item \href{#method-full_trips-random_forest_models}{\code{full_trips$random_forest_models()}}
-\item \href{#method-full_trips-models_checking}{\code{full_trips$models_checking()}}
-\item \href{#method-full_trips-data_formatting_for_predictions}{\code{full_trips$data_formatting_for_predictions()}}
-\item \href{#method-full_trips-model_predictions}{\code{full_trips$model_predictions()}}
-\item \href{#method-full_trips-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
-\item \href{#method-full_trips-clone}{\code{full_trips$clone()}}
+  \itemize{
+    \item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
+    \item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
+    \item \href{#method-full_trips-filter_by_years_period}{\code{full_trips$filter_by_years_period()}}
+    \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
+    \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
+    \item \href{#method-full_trips-rf1}{\code{full_trips$rf1()}}
+    \item \href{#method-full_trips-conversion_weight_category}{\code{full_trips$conversion_weight_category()}}
+    \item \href{#method-full_trips-set_count}{\code{full_trips$set_count()}}
+    \item \href{#method-full_trips-fishing_effort}{\code{full_trips$fishing_effort()}}
+    \item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
+    \item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
+    \item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
+    \item \href{#method-full_trips-well_set_weight_categories}{\code{full_trips$well_set_weight_categories()}}
+    \item \href{#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
+    \item \href{#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
+    \item \href{#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
+    \item \href{#method-full_trips-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}
+    \item \href{#method-full_trips-path_to_level3}{\code{full_trips$path_to_level3()}}
+    \item \href{#method-full_trips-data_preparatory}{\code{full_trips$data_preparatory()}}
+    \item \href{#method-full_trips-random_forest_models}{\code{full_trips$random_forest_models()}}
+    \item \href{#method-full_trips-models_checking}{\code{full_trips$models_checking()}}
+    \item \href{#method-full_trips-data_formatting_for_predictions}{\code{full_trips$data_formatting_for_predictions()}}
+    \item \href{#method-full_trips-model_predictions}{\code{full_trips$model_predictions()}}
+    \item \href{#method-full_trips-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
+    \item \href{#method-full_trips-clone}{\code{full_trips$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="add"><a href='../../t3/html/list_t3.html#method-list_t3-add'><code>t3::list_t3$add()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>t3::list_t3$count()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>t3::list_t3$extract()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>t3::list_t3$filter()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>t3::list_t3$filter_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="initialize"><a href='../../t3/html/list_t3.html#method-list_t3-initialize'><code>t3::list_t3$initialize()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>t3::list_t3$modification_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>t3::list_t3$name()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>t3::list_t3$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>t3::list_t3$view()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="add"><a href='../../t3/html/list_t3.html#method-list_t3-add'><code>list_t3$add()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>list_t3$count()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>list_t3$extract()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>list_t3$extract_l1_element_value()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>list_t3$filter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>list_t3$filter_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="initialize"><a href='../../t3/html/list_t3.html#method-list_t3-initialize'><code>list_t3$initialize()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>list_t3$modification_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>list_t3$name()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>list_t3$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>list_t3$view()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-create_full_trips"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-create_full_trips}{}}}
-\subsection{Method \code{create_full_trips()}}{
-Creation of full trip item from trips.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$create_full_trips(object_trips)}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$create_full_trips()}}{
+  Creation of full trip item from trips.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$create_full_trips(object_trips)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{object_trips}}{Object of type R6-trips expected. A R6 reference object of class trips.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{object_trips}}{Object of type R6-trips expected. A R6 reference object of class trips.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-add_activities"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-add_activities}{}}}
-\subsection{Method \code{add_activities()}}{
-Function for add activities in full trips object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_activities(object_activities)}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$add_activities()}}{
+  Function for add activities in full trips object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$add_activities(object_activities)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{object_activities}}{Object of type R6-activities expected. A R6 reference object of class activities.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{object_activities}}{Object of type R6-activities expected. A R6 reference object of class activities.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-filter_by_years_period"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-filter_by_years_period}{}}}
-\subsection{Method \code{filter_by_years_period()}}{
-Function for filter full trips by a year(s) period.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_years_period(years_period)}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$filter_by_years_period()}}{
+  Function for filter full trips by a year(s) period.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$filter_by_years_period(years_period)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-add_elementarylandings"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-add_elementarylandings}{}}}
-\subsection{Method \code{add_elementarylandings()}}{
-Function for add elementary landings in full trips object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_elementarylandings(object_elementarylandings)}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$add_elementarylandings()}}{
+  Function for add elementary landings in full trips object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$add_elementarylandings(object_elementarylandings)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{object_elementarylandings}}{Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{object_elementarylandings}}{Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-add_wells_samples"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-add_wells_samples}{}}}
-\subsection{Method \code{add_wells_samples()}}{
-Function for add wells and samples characteristics in full trips object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_wells_samples(object_wells)}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$add_wells_samples()}}{
+  Function for add wells and samples characteristics in full trips object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$add_wells_samples(object_wells)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{object_wells}}{Object of type R6-wells expected. A R6 reference object of class wells.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{object_wells}}{Object of type R6-wells expected. A R6 reference object of class wells.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-rf1"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-rf1}{}}}
-\subsection{Method \code{rf1()}}{
-Process of Raising Factor level 1 (RF1 and RF2) calculation.
+\subsection{\code{full_trips$rf1()}}{
+  Process of Raising Factor level 1 (RF1 and RF2) calculation.
 The RF1 aim to correct the weight visual estimation bias of catches filled in logbooks and correspond to the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
 Raising Factor 2 (RF2) is not implemented yet but will be computed at this step.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$rf1(
   rf1_computation = TRUE,
   apply_rf1_on_bycatch = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
@@ -168,37 +177,30 @@ Raising Factor 2 (RF2) is not implemented yet but will be computed at this step.
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   global_output_path = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{rf1_computation}}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{rf1_computation}}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.}
-
-\item{\code{apply_rf1_on_bycatch}}{Object of class \code{\link[base]{logical}} expected. By default TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.
+      \item{\code{apply_rf1_on_bycatch}}{Object of class \code{\link[base]{logical}} expected. By default TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.
 If FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.}
-
-\item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
+      \item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (\emph{Thunnus albacares}), SKJ (\emph{Katsuwonus pelamis}), BET (\emph{Thunnus obesus}), ALB (\emph{Thunnus alalunga}),
 LOT (\emph{Thunnus tonggol}) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).}
-
-\item{\code{species_fate_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
-
-\item{\code{vessel_type_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).}
-
-\item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
-
-\item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+      \item{\code{species_fate_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
+      \item{\code{vessel_type_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).}
+      \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
+      \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
  \itemize{
  \item{process_1_1_global: a table (.csv) with as many rows as full trips and 18 columns:}
  \itemize{
@@ -263,14 +265,14 @@ If a global_output_path is specified, the following outputs are extracted and sa
  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
  }
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-conversion_weight_category"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-conversion_weight_category}{}}}
-\subsection{Method \code{conversion_weight_category()}}{
-Process of logbook weight categories conversion. \cr
+\subsection{\code{full_trips$conversion_weight_category()}}{
+  Process of logbook weight categories conversion. \cr
 Logbook's weight categories change from one tuna fishing company to another, that involves overlaps and are hardly usable directly from the logbook.
 This process aims to homogenize these weight categories and create simplify categories divided in function of the fishing school and the ocean:
 \itemize{
@@ -280,26 +282,26 @@ This process aims to homogenize these weight categories and create simplify cate
 }
 For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
 Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weight_category(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$conversion_weight_category(
   global_output_path = NULL,
   referential_template = "observe"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected.
+      \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected.
 By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
  process_1_2: a table (.csv) with as many rows as elementary catches, plus the catches resulting from the conversion of weight categories and 23 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -365,33 +367,33 @@ If a global_output_path is specified, the following output is extracted and save
  }
 For species "SKJ" the standard weight category is "<10kg" in all cases.
 An "unknown" weight category is assigned to all other species than "SKJ", "YFT", "BET" and "ALB".
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-set_count"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-set_count}{}}}
-\subsection{Method \code{set_count()}}{
-Process for positive sets count.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(
+\subsection{\code{full_trips$set_count()}}{
+  Process for positive sets count.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$set_count(
   global_output_path = NULL,
   referential_template = "observe"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+      \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
  process_1_3: a table (.csv) with as many rows as activities and 15 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -412,54 +414,50 @@ If a global_output_path is specified, the following output is extracted and save
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
  \item{positive_set_count: } count of positive set (catch weight and/or catch count not zero), type \code{\link[base]{integer}}.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-fishing_effort"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-fishing_effort}{}}}
-\subsection{Method \code{fishing_effort()}}{
-Process for set duration, time at sea, fishing time and searching time calculation (in hours).
+\subsection{\code{full_trips$fishing_effort()}}{
+  Process for set duration, time at sea, fishing time and searching time calculation (in hours).
 Details about the methods are available in the vignette : \href{https://ob7-ird.github.io/t3/articles/level_1.html#set-duration-calculation}{Process 1.4: Fishing effort indicators calculation}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_effort(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$fishing_effort(
   set_duration_ref,
   activity_code_ref,
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
   global_output_path = NULL,
   referential_template = "observe"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Data and parameters for set duration calculation (by year, country, ocean and school type),
 in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
 Duration in minutes in the reference table, converted into hours in output for subsequent processing).}
-
-\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
  and/or searching time and/or set duration.}
-
-\item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
-
-\item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
+      \item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
+      \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
 See below for more details.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe".
+      \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe".
 Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Available variables are:
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    Available variables are:
 \itemize{
  \item{"sunrise": } sunrise (top edge of the sun appears on the horizon)
  \item{"sunriseEnd": } sunrise ends (bottom edge of the sun touches the horizon)
@@ -503,43 +501,42 @@ If a global_output_path is specified, the following output is extracted and save
  \item{searching_time: } searching time in hours, type \code{\link[base]{numeric}}.\cr
   Equal to the fishing time value minus the sum of the sets duration values.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-sample_length_class_ld1_to_lf"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-sample_length_class_ld1_to_lf}{}}}
-\subsection{Method \code{sample_length_class_ld1_to_lf()}}{
-Process for length conversion, if necessary, in length fork (lf). \cr
+\subsection{\code{full_trips$sample_length_class_ld1_to_lf()}}{
+  Process for length conversion, if necessary, in length fork (lf). \cr
 In fact, during the sampling process, fishes length can be collected and expressed in different standards. \cr
 For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).\cr
  Generally, length of small individuals are provided in LF because it's logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
 This step aims to standardize this standard among sampling data and at the end have only length sampling data expressed in LF. \cr
 Historical and so far, the process use a referential \href{https://ob7-ird.github.io/t3/reference/length_step.html}{conversion table LD1 to LF}.
 In addition, the \code{sample_number_measured} variable, in this step will be converted to a \code{sample_number_measured_lf} variable (notably due to the creation of new samples to split one LD1 class in multiples LF classes during certain conversions).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_ld1_to_lf(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$sample_length_class_ld1_to_lf(
   length_step,
   global_output_path = NULL,
   referential_template = "observe"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Data frame object with length ratio between ld1 and lf class, in the same format as the \href{https://ob7-ird.github.io/t3/reference/length_step.html}{conversion table LD1 to LF}.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+      \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -568,32 +565,33 @@ If a global_output_path is specified, the following output is extracted and save
  the LD1 to LF conversion will create a new elementary sample row because a percentage of \code{ratio=50} \% of the number of fish in the sample will be assigned to the curved fork length class: \code{sample_number_measured_lf=32} (cm) ( \code{sample_number_measured_lf=0.5})
  and 50\% of this sample will obtain a \code{sample_number_measured_lf=34} (cm) with \code{sample_number_measured_lf=0.5}.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-sample_number_measured_extrapolation"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-sample_number_measured_extrapolation}{}}}
-\subsection{Method \code{sample_number_measured_extrapolation()}}{
-Process for sample number measured individuals extrapolation to sample number individuals counted.
+\subsection{\code{full_trips$sample_number_measured_extrapolation()}}{
+  Process for sample number measured individuals extrapolation to sample number individuals counted.
 In fact, during the sampling and according to the protocol, just a part of the sampled individuals are measured in relation to that counted.
 The aim of this step is to extrapolate the number of individuals measured in the sample to the number of individuals counted in the sample.
 To do that, a Raising Factor (RF4) is calculated per stratum, per well, per sample, per sub-sample and per species.
 It is equal, by stratum, to the sum of each counted individuals divided by the sum of measured individuals (after conversion of measure in curved fork length in the process 2.1).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation(global_output_path = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$sample_number_measured_extrapolation(global_output_path = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 19 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -621,39 +619,39 @@ If a global_output_path is specified, the following output is extracted and save
  \item{sample_number_measured_extrapolated_lf: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{numeric}}.\cr
  \code{sample_number_measured_extrapolated_lf=sample_number_measured_lf x rf4}.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-sample_length_class_step_standardisation"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-sample_length_class_step_standardisation}{}}}
-\subsection{Method \code{sample_length_class_step_standardisation()}}{
-Process for step standardisation of lf length class.
+\subsection{\code{full_trips$sample_length_class_step_standardisation()}}{
+  Process for step standardisation of lf length class.
  This step aims to standardize sample length classes. So far, these specifications are integrate in the process:
  \itemize{
 \item{ a length classes step of 1cm for: } SKJ (\emph{Katsuwonus pelamis}), LTA (\emph{Euthynnus alletteratus}) and FRI (\emph{Auxis thazard}),
 \item{ a length classes step of 2cm fo: } YFT (\emph{Thunnus albacares}), BET (\emph{Thunnus obesus}) and ALB (\emph{Thunnus alalunga}).
 }
 To standardize the original sample's curved fork length (LF), the object "elementarysample" is created by  aggregation of elementary sample raw.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_step_standardisation(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$sample_length_class_step_standardisation(
   maximum_lf_class = as.integer(500),
   global_output_path = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{maximum_lf_class}}{Object of type \code{\link[base]{integer}} expected. Theoretical maximum lf class that can occur (all species considerated). By default 500.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory.The function will create subsection if necessary.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{maximum_lf_class}}{Object of type \code{\link[base]{integer}} expected. Theoretical maximum lf class that can occur (all species considerated). By default 500.}
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory.The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_3: a table (.csv) with as many rows as elementary samples, and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -680,14 +678,14 @@ If a global_output_path is specified, the following output is extracted and save
  \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}),
   type \code{\link[base]{numeric}}.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-well_set_weight_categories"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-well_set_weight_categories}{}}}
-\subsection{Method \code{well_set_weight_categories()}}{
-Process for well set weight categories definition.
+\subsection{\code{full_trips$well_set_weight_categories()}}{
+  Process for well set weight categories definition.
 The sampling provides information at the well scale. However, a set can be split between several wells and the individuals sampled could belong to as many sets as there are in the well.
 This process aim to compute a weighted weight, which represents the weight of a set in a well, according to the distribution of this set in all the wells.\cr
 The overall formula is as follows:
@@ -705,28 +703,27 @@ Furthermore, a proportion of each sampling sets among the sampling well will be 
  \item{PWW: } is the proportional weighted weight,
  \item{\eqn{WW_{i,j}}{WW_ij}: } is the weighted weight of the current set i in well j.
  }
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weight_categories(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$well_set_weight_categories(
   sample_set,
   global_output_path = NULL,
   referential_template = "observe"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weight of each set sampled.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weight of each set sampled.}
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+      \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_4: a table (.csv) with as many rows as elementary samples, and 14 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -752,31 +749,32 @@ If a global_output_path is specified, the following output is extracted and save
  A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one.\cr
  The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). \cr
  For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-standardised_sample_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-standardised_sample_creation}{}}}
-\subsection{Method \code{standardised_sample_creation()}}{
-Object standardized sample creation.
+\subsection{\code{full_trips$standardised_sample_creation()}}{
+  Object standardized sample creation.
 This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data.
 In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF).
 This step create a new object called standardized sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the species.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_creation(global_output_path = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$standardised_sample_creation(global_output_path = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_5: a table (.csv) with as many rows as standardized samples, and 13 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -796,14 +794,14 @@ If a global_output_path is specified, the following output is extracted and save
  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
  \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and  extrapolated to all counted individuals), type \code{\link[base]{numeric}}.\cr
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-standardised_sample_set_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-standardised_sample_set_creation}{}}}
-\subsection{Method \code{standardised_sample_set_creation()}}{
-R6 object standardised sample set creation.
+\subsection{\code{full_trips$standardised_sample_set_creation()}}{
+  R6 object standardised sample set creation.
 In the previous processes and in the object standardized sample associated, samples is expressed at the well scale.\cr
 In this step, the aim is to move to the expression of sample by well to sample by set. \cr
 In the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories}{2.4}, a weighted weight (WW) and a proportion of this weighted weight (PWW) at the set scale, has been calculated.\cr
@@ -816,27 +814,27 @@ LWR formulas take the form: \eqn{RWT=a \times LF^b}{RWT= a x (LF)^b}, where:
 \item{parameters a and b} comes from a references table as the \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table} and are dependent of of the species and potentially of the area (ocean or others) and the season.
 }
 More detail information could be find on the regional fisheries management organisations (RFMOs) like \href{https://www.iccat.int/}{ICCAT} or \href{https://iotc.org/}{IOTC}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$standardised_sample_set_creation(
   length_weight_relationship_data,
   global_output_path = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Data frame object with parameters for length weight relationships, in the same format as the \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_6: a table (.csv) with as many rows as , and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -866,14 +864,14 @@ If a global_output_path is specified, the following output is extracted and save
  \code{sample_weight = sample_weight_unit * sample_number_weighted}.
  \item{sample_category: } sample category ("-10kg" or "+10kg"), according to \code{sample_weight_unit} value, type \code{\link[base]{character}}.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-raised_factors_determination"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-raised_factors_determination}{}}}
-\subsection{Method \code{raised_factors_determination()}}{
-Raised factors determination for weight sample set to set.
+\subsection{\code{full_trips$raised_factors_determination()}}{
+  Raised factors determination for weight sample set to set.
 This step aims to check relevance of the object standardized sample set by calculation of 6 parameters at the scale of each well sets, if it's possible regarding data available:
  \itemize{
  \item{number and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg or > 10kg):
@@ -902,38 +900,34 @@ This step aims to check relevance of the object standardized sample set by calcu
   \item{\code{threshold_frequency_rf_plus10}: } by default at 75,
   \item{\code{threshold_rf_total}: } by default at 250.
   }
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_factors_determination(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$raised_factors_determination(
   threshold_rf_minus10 = as.integer(500),
   threshold_rf_plus10 = as.integer(500),
   threshold_frequency_rf_minus10 = as.integer(75),
   threshold_frequency_rf_plus10 = as.integer(75),
   threshold_rf_total = as.integer(250),
   global_output_path = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{threshold_rf_minus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.}
-
-\item{\code{threshold_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.}
-
-\item{\code{threshold_frequency_rf_minus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.}
-
-\item{\code{threshold_frequency_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.}
-
-\item{\code{threshold_rf_total}}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{threshold_rf_minus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.}
+      \item{\code{threshold_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.}
+      \item{\code{threshold_frequency_rf_minus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.}
+      \item{\code{threshold_frequency_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.}
+      \item{\code{threshold_rf_total}}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.}
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_7: a table (.csv) with as many rows as , and 15 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -957,29 +951,30 @@ If a global_output_path is specified, the following output is extracted and save
  \item{rf_validation: } raising factor status, type \code{\link[base]{integer}}.
  \item{rf_validation_label: } raising factor status label, type \code{\link[base]{character}}.
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-raised_standardised_sample_set"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-raised_standardised_sample_set}{}}}
-\subsection{Method \code{raised_standardised_sample_set()}}{
-Application of raised factors calculated in process \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination}{2.7} on standardised sample set.
+\subsection{\code{full_trips$raised_standardised_sample_set()}}{
+  Application of raised factors calculated in process \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination}{2.7} on standardised sample set.
 This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set(global_output_path = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$raised_standardised_sample_set(global_output_path = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
  process_2_8: a table (.csv) with as many rows as , and 16 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
@@ -1011,36 +1006,36 @@ If a global_output_path is specified, the following output is extracted and save
  \item{sample_weight_set: } sample weight by set (tonnes), type \code{\link[base]{numeric}}.\cr
  \code{sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set}
  }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-path_to_level3"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-path_to_level3}{}}}
-\subsection{Method \code{path_to_level3()}}{
-Temporary link to the R object model with modelling level 3 process.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(
+\subsection{\code{full_trips$path_to_level3()}}{
+  Temporary link to the R object model with modelling level 3 process.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$path_to_level3(
   global_output_path = NULL,
   target_year = as.integer(lubridate::year(Sys.time() - 1))
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
-
-\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
 Year of interest for the model estimation and prediction.
 Default value is current year - 1. Used only if a \code{global_output_path} is specified.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-If a global_output_path is specified, the following output is extracted and saved in ".RData" format under the path: "global_output_path/". \cr
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    If a global_output_path is specified, the following output is extracted and saved in ".RData" format under the path: "global_output_path/". \cr
  "inputs_level3_\code{target_year}_ocean_\code{ocean_code}_\code{country_(ies)}": a list of 5 \code{\link[base]{data.frame}}:
  \itemize{
  \item{act: } a data.frame with as many rows as activities and 10 column:
@@ -1110,10 +1105,9 @@ If a global_output_path is specified, the following output is extracted and save
  }
  }
  @aliases path_to_level3
-}
-
-\subsection{Returns}{
-a list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} \code{process_level3$raw_inputs_level3$}:
+  }
+  \subsection{Returns}{
+    a list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} \code{process_level3$raw_inputs_level3$}:
  \itemize{
  \item{\code{act}: } a data table recording the activities ID, date, type, coordinates, fishing school type and associated trip ID, as well as the vessel, ocean and flag codes.
  \item{\code{act3}: } a data table recording the  activities ID, date and type and associated catches (species, species fate code, weight, count and standard weight category).
@@ -1121,25 +1115,23 @@ a list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} \code
  \item{\code{sset}: } a data table recording the samples ID, type and quality by activity (ID).
  \item{\code{wp}: } a data table recording the well plan, i.e. the well ID and corresponding activities and samples ID with associated species, sample weight and well's weight category (+10kg or -10kg).
  }
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{process_level3 <- object_full_trips$path_to_level3(global_output_path = final_output_path)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-process_level3 <- object_full_trips$path_to_level3(global_output_path = final_output_path)
-}
-}
-\if{html}{\out{</div>}}
-
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-data_preparatory"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-data_preparatory}{}}}
-\subsection{Method \code{data_preparatory()}}{
-Data preparatory for the t3 modelling process (level 3).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$data_preparatory(
+\subsection{\code{full_trips$data_preparatory()}}{
+  Data preparatory for the t3 modelling process (level 3).
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$data_preparatory(
   inputs_level3 = NULL,
   inputs_level3_path = NULL,
   output_directory,
@@ -1152,125 +1144,112 @@ Data preparatory for the t3 modelling process (level 3).
   set_weight_minimum = as.integer(6),
   minimum_set_frequency = 0.1,
   vessel_id_ignored = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected.
 Inputs of levels 3 (see function path to level 3).}
-
-\item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected.
+      \item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected.
 Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3).
 If provide, replace the inputs_level3 object.}
-
-\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected.
+      \item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected.
 Path of the outputs directory.}
-
-\item{\code{periode_reference_level3}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{periode_reference_level3}}{Object of type \code{\link[base]{integer}} expected.
 Year(s) period of reference for modelling estimation.}
-
-\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
 Year of interest for the model estimation and prediction.
 Default value is current year - 1.}
-
-\item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected.
 Number of years use for the modelling. The default value is 4.}
-
-\item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected.
 The code of ocean of interest.}
-
-\item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected.
 Maximum distance between all sets of a sampled well. By default 5.}
-
-\item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected.
 Maximum number of sets allowed in mixture. By default 5.}
-
-\item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected.
 Minimum set size considered. Remove smallest set for which sample could not be representative.
 By default 6 t.}
-
-\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected.
+      \item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected.
 Minimum threshold proportion of set in a well to be used for model training in the process.
 By default 0.1.}
-
-\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected.
+      \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected.
 Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction.
 By default NULL.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-random_forest_models"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-random_forest_models}{}}}
-\subsection{Method \code{random_forest_models()}}{
-Modelling proportions in sets througth random forest models.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(
+\subsection{\code{full_trips$random_forest_models()}}{
+  Modelling proportions in sets througth random forest models.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$random_forest_models(
   output_level3_process1,
   num.trees = 1000L,
   mtry = 2L,
   min.node.size = 5,
   seed_number = 7L,
   small_fish_only = FALSE
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{output_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
+      \item{\code{num.trees}}{Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
+      \item{\code{mtry}}{Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.}
+      \item{\code{min.node.size}}{Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
+      \item{\code{seed_number}}{Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.}
+      \item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{output_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
-
-\item{\code{num.trees}}{Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
-
-\item{\code{mtry}}{Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.}
-
-\item{\code{min.node.size}}{Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
-
-\item{\code{seed_number}}{Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.}
-
-\item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-models_checking"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-models_checking}{}}}
-\subsection{Method \code{models_checking()}}{
-Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(
+\subsection{\code{full_trips$models_checking()}}{
+  Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$models_checking(
   output_level3_process2,
   output_directory,
   plot_sample = FALSE,
   avdth_patch_coord = FALSE
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{output_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
+      \item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+      \item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
+      \item{\code{avdth_patch_coord}}{parameter waiting for coordinate conversion patch from avdth database}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{output_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
-
-\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
-
-\item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
-
-\item{\code{avdth_patch_coord}}{parameter waiting for coordinate conversion patch from avdth database}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-data_formatting_for_predictions"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-data_formatting_for_predictions}{}}}
-\subsection{Method \code{data_formatting_for_predictions()}}{
-Formatting data for model predictions.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$data_formatting_for_predictions(
+\subsection{\code{full_trips$data_formatting_for_predictions()}}{
+  Formatting data for model predictions.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$data_formatting_for_predictions(
   inputs_level3,
   output_level3_process1,
   target_year,
@@ -1278,36 +1257,32 @@ Formatting data for model predictions.
   country_flag = NULL,
   input_type = "observe_database",
   small_fish_only = FALSE
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
+      \item{\code{output_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
+      \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
+      \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
+      \item{\code{country_flag}}{Three letters FAO flag code of country to estimate catches.}
+      \item{\code{input_type}}{Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.}
+      \item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
-
-\item{\code{output_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
-
-\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
-
-\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
-
-\item{\code{country_flag}}{Three letters FAO flag code of country to estimate catches.}
-
-\item{\code{input_type}}{Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.}
-
-\item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-model_predictions"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-model_predictions}{}}}
-\subsection{Method \code{model_predictions()}}{
-Model predictions for the species composition and computing of catches.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(
+\subsection{\code{full_trips$model_predictions()}}{
+  Model predictions for the species composition and computing of catches.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$model_predictions(
   output_level3_process2,
   output_level3_process4,
   output_directory,
@@ -1316,56 +1291,54 @@ Model predictions for the species composition and computing of catches.
   ci_type = "all",
   Nboot = 50,
   plot_predict = FALSE
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{output_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).}
+      \item{\code{output_level3_process4}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).}
+      \item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+      \item{\code{country_flag}}{Three letters FAO flag code of country to estimate catches.}
+      \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
+      \item{\code{ci_type}}{Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.}
+      \item{\code{Nboot}}{Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.}
+      \item{\code{plot_predict}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{output_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).}
-
-\item{\code{output_level3_process4}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).}
-
-\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
-
-\item{\code{country_flag}}{Three letters FAO flag code of country to estimate catches.}
-
-\item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
-
-\item{\code{ci_type}}{Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.}
-
-\item{\code{Nboot}}{Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.}
-
-\item{\code{plot_predict}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-show_me_what_you_got"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-show_me_what_you_got}{}}}
-\subsection{Method \code{show_me_what_you_got()}}{
-Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$show_me_what_you_got()}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$show_me_what_you_got()}}{
+  Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$show_me_what_you_got()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{full_trips$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{full_trips$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

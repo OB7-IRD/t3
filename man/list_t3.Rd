@@ -8,240 +8,252 @@ Create R6 reference object class list_t3.
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-list_t3-new}{\code{list_t3$new()}}
-\item \href{#method-list_t3-name}{\code{list_t3$name()}}
-\item \href{#method-list_t3-add}{\code{list_t3$add()}}
-\item \href{#method-list_t3-remove}{\code{list_t3$remove()}}
-\item \href{#method-list_t3-view}{\code{list_t3$view()}}
-\item \href{#method-list_t3-count}{\code{list_t3$count()}}
-\item \href{#method-list_t3-extract}{\code{list_t3$extract()}}
-\item \href{#method-list_t3-filter}{\code{list_t3$filter()}}
-\item \href{#method-list_t3-filter_l1}{\code{list_t3$filter_l1()}}
-\item \href{#method-list_t3-extract_l1_element_value}{\code{list_t3$extract_l1_element_value()}}
-\item \href{#method-list_t3-modification_l1}{\code{list_t3$modification_l1()}}
-\item \href{#method-list_t3-clone}{\code{list_t3$clone()}}
-}
+  \itemize{
+    \item \href{#method-list_t3-initialize}{\code{list_t3$new()}}
+    \item \href{#method-list_t3-name}{\code{list_t3$name()}}
+    \item \href{#method-list_t3-add}{\code{list_t3$add()}}
+    \item \href{#method-list_t3-remove}{\code{list_t3$remove()}}
+    \item \href{#method-list_t3-view}{\code{list_t3$view()}}
+    \item \href{#method-list_t3-count}{\code{list_t3$count()}}
+    \item \href{#method-list_t3-extract}{\code{list_t3$extract()}}
+    \item \href{#method-list_t3-filter}{\code{list_t3$filter()}}
+    \item \href{#method-list_t3-filter_l1}{\code{list_t3$filter_l1()}}
+    \item \href{#method-list_t3-extract_l1_element_value}{\code{list_t3$extract_l1_element_value()}}
+    \item \href{#method-list_t3-modification_l1}{\code{list_t3$modification_l1()}}
+    \item \href{#method-list_t3-clone}{\code{list_t3$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list_t3-new"></a>}}
-\if{latex}{\out{\hypertarget{method-list_t3-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 list_t3 class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-list_t3-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-initialize}{}}}
+\subsection{\code{list_t3$new()}}{
+  Initialize function for R6 list_t3 class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-name"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-name}{}}}
-\subsection{Method \code{name()}}{
-Function for display item's name(s) attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$name(attribut = "all")}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$name()}}{
+  Function for display item's name(s) attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$name(attribut = "all")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut}}{(character) Display all names with "all" attribut or specify one.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut}}{(character) Display all names with "all" attribut or specify one.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-add"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-add}{}}}
-\subsection{Method \code{add()}}{
-Function for add new element in specific attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$add(new_item, attribut = "data", silent = TRUE)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$add()}}{
+  Function for add new element in specific attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$add(new_item, attribut = "data", silent = TRUE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{new_item}}{(all type) Item to add.}
+      \item{\code{attribut}}{(character) Attribut's name. By default "data".}
+      \item{\code{silent}}{{\link[base]{logical}} expected. By default TRUE Display or not information when you run the process.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{new_item}}{(all type) Item to add.}
-
-\item{\code{attribut}}{(character) Attribut's name. By default "data".}
-
-\item{\code{silent}}{{\link[base]{logical}} expected. By default TRUE Display or not information when you run the process.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-remove"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-remove}{}}}
-\subsection{Method \code{remove()}}{
-Function for removed element of specific attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$remove(item_id, attribut = "data")}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$remove()}}{
+  Function for removed element of specific attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$remove(item_id, attribut = "data")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{item_id}}{(numeric) Identification number of item to remove.}
+      \item{\code{attribut}}{(character) Attribut's name. By default "data".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{item_id}}{(numeric) Identification number of item to remove.}
-
-\item{\code{attribut}}{(character) Attribut's name. By default "data".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-view"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-view}{}}}
-\subsection{Method \code{view()}}{
-Function for display element(s) of specific attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$view(..., attribut = "data")}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$view()}}{
+  Function for display element(s) of specific attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$view(..., attribut = "data")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{(list) Identification number or name of item(s) to display.}
+      \item{\code{attribut}}{(character) Attribut's name. By default "data".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{(list) Identification number or name of item(s) to display.}
-
-\item{\code{attribut}}{(character) Attribut's name. By default "data".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-count"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-count}{}}}
-\subsection{Method \code{count()}}{
-Function for display number of elements of a specific attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$count(attribut = "data")}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$count()}}{
+  Function for display number of elements of a specific attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$count(attribut = "data")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut}}{(character) Attribut's name. By default "data".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut}}{(character) Attribut's name. By default "data".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-extract"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-extract}{}}}
-\subsection{Method \code{extract()}}{
-Function for extract element(s) of a specific attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$extract(attribut_l1 = "data", attribut_l2 = NULL, id = NULL)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$extract()}}{
+  Function for extract element(s) of a specific attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$extract(attribut_l1 = "data", attribut_l2 = NULL, id = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
+      \item{\code{attribut_l2}}{(character or NULL) Second strate attribut's name. By default NULL.}
+      \item{\code{id}}{(integer) Number identification of element in the attribut.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
-
-\item{\code{attribut_l2}}{(character or NULL) Second strate attribut's name. By default NULL.}
-
-\item{\code{id}}{(integer) Number identification of element in the attribut.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-filter"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-filter}{}}}
-\subsection{Method \code{filter()}}{
-Function for select attribut's element(s) by specific filter.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$filter(attribut_l1 = "data", filter)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$filter()}}{
+  Function for select attribut's element(s) by specific filter.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$filter(attribut_l1 = "data", filter)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
+      \item{\code{filter}}{(character) Filter by a specific filter.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
-
-\item{\code{filter}}{(character) Filter by a specific filter.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-filter_l1"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-filter_l1}{}}}
-\subsection{Method \code{filter_l1()}}{
-Function for select item(s) by specific selection.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$filter_l1(attribut_l1 = "data", filter, clone = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$filter_l1()}}{
+  Function for select item(s) by specific selection.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$filter_l1(attribut_l1 = "data", filter, clone = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
+      \item{\code{filter}}{Object of type \code{\link[base]{character}} expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" & $path$activity_id == "activity168""}
+      \item{\code{clone}}{Object of type \code{\link[base]{logical}} expected. TRUE if you want to create a new object (not link to the original object).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
-
-\item{\code{filter}}{Object of type \code{\link[base]{character}} expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" & $path$activity_id == "activity168""}
-
-\item{\code{clone}}{Object of type \code{\link[base]{logical}} expected. TRUE if you want to create a new object (not link to the original object).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-extract_l1_element_value"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-extract_l1_element_value}{}}}
-\subsection{Method \code{extract_l1_element_value()}}{
-Function for extract element(s) of a specific attribut.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$extract_l1_element_value(attribut_l1 = "data", element)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$extract_l1_element_value()}}{
+  Function for extract element(s) of a specific attribut.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$extract_l1_element_value(attribut_l1 = "data", element)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
+      \item{\code{element}}{Object of type \code{\link[base]{character}} expected. Name of the element.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
-
-\item{\code{element}}{Object of type \code{\link[base]{character}} expected. Name of the element.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-modification_l1"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-modification_l1}{}}}
-\subsection{Method \code{modification_l1()}}{
-Function for modification item(s).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$modification_l1(attribut_l1 = "data", modification, silent = TRUE)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$modification_l1()}}{
+  Function for modification item(s).
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$modification_l1(attribut_l1 = "data", modification, silent = TRUE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
+      \item{\code{modification}}{Object of type \code{\link[base]{character}} expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"}
+      \item{\code{silent}}{Object of type \code{\link[base]{logical}} expected. Display outputs of modificated values.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
-
-\item{\code{modification}}{Object of type \code{\link[base]{character}} expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"}
-
-\item{\code{silent}}{Object of type \code{\link[base]{logical}} expected. Display outputs of modificated values.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list_t3-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-list_t3-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{list_t3$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{list_t3$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

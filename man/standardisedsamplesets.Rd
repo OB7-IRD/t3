@@ -7,98 +7,104 @@
 Create R6 reference object class standardisedsamplesets
 }
 \section{Super class}{
-\code{\link[t3:list_t3]{t3::list_t3}} -> \code{standardisedsamplesets}
+\code{\link[t3:list_t3]{list_t3}} -> \code{standardisedsamplesets}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-standardisedsamplesets-new}{\code{standardisedsamplesets$new()}}
-\item \href{#method-standardisedsamplesets-add}{\code{standardisedsamplesets$add()}}
-\item \href{#method-standardisedsamplesets-filter_by_trip}{\code{standardisedsamplesets$filter_by_trip()}}
-\item \href{#method-standardisedsamplesets-clone}{\code{standardisedsamplesets$clone()}}
+  \itemize{
+    \item \href{#method-standardisedsamplesets-initialize}{\code{standardisedsamplesets$new()}}
+    \item \href{#method-standardisedsamplesets-add}{\code{standardisedsamplesets$add()}}
+    \item \href{#method-standardisedsamplesets-filter_by_trip}{\code{standardisedsamplesets$filter_by_trip()}}
+    \item \href{#method-standardisedsamplesets-clone}{\code{standardisedsamplesets$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>t3::list_t3$count()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>t3::list_t3$extract()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>t3::list_t3$filter()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>t3::list_t3$filter_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>t3::list_t3$modification_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>t3::list_t3$name()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>t3::list_t3$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>t3::list_t3$view()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>list_t3$count()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>list_t3$extract()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>list_t3$extract_l1_element_value()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>list_t3$filter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>list_t3$filter_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>list_t3$modification_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>list_t3$name()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>list_t3$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>list_t3$view()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-standardisedsamplesets-new"></a>}}
-\if{latex}{\out{\hypertarget{method-standardisedsamplesets-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 standardisedsamplesets class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{standardisedsamplesets$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-standardisedsamplesets-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-standardisedsamplesets-initialize}{}}}
+\subsection{\code{standardisedsamplesets$new()}}{
+  Initialize function for R6 standardisedsamplesets class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{standardisedsamplesets$new(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{(empty, list or R6-standardisedsampleset classes) Nothing, a list of object R6-standardisedsampleset classes or one object R6-standardisedsampleset classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{(empty, list or R6-standardisedsampleset classes) Nothing, a list of object R6-standardisedsampleset classes or one object R6-standardisedsampleset classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardisedsamplesets-add"></a>}}
 \if{latex}{\out{\hypertarget{method-standardisedsamplesets-add}{}}}
-\subsection{Method \code{add()}}{
-Function for add a new standardisedsampleset in the object standardisedsamplesets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{standardisedsamplesets$add(new_item)}\if{html}{\out{</div>}}
+\subsection{\code{standardisedsamplesets$add()}}{
+  Function for add a new standardisedsampleset in the object standardisedsamplesets.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{standardisedsamplesets$add(new_item)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{new_item}}{(list or R6-standardisedsampleset classes) A list of object R6-standardisedsampleset classes or one object R6-standardisedsampleset classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{new_item}}{(list or R6-standardisedsampleset classes) A list of object R6-standardisedsampleset classes or one object R6-standardisedsampleset classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardisedsamplesets-filter_by_trip"></a>}}
 \if{latex}{\out{\hypertarget{method-standardisedsamplesets-filter_by_trip}{}}}
-\subsection{Method \code{filter_by_trip()}}{
-Function for filter standardisedsamplesets by trip identification.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{standardisedsamplesets$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
+\subsection{\code{standardisedsamplesets$filter_by_trip()}}{
+  Function for filter standardisedsamplesets by trip identification.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{standardisedsamplesets$filter_by_trip(trip_id)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{(character) Trip identification.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{(character) Trip identification.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardisedsamplesets-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-standardisedsamplesets-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{standardisedsamplesets$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{standardisedsamplesets$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{standardisedsamplesets$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

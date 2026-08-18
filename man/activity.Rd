@@ -8,18 +8,19 @@ Create R6 reference object class activity
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-activity-new}{\code{activity$new()}}
-\item \href{#method-activity-clone}{\code{activity$clone()}}
-}
+  \itemize{
+    \item \href{#method-activity-initialize}{\code{activity$new()}}
+    \item \href{#method-activity-clone}{\code{activity$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-activity-new"></a>}}
-\if{latex}{\out{\hypertarget{method-activity-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 activities class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{activity$new(
+\if{html}{\out{<a id="method-activity-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-activity-initialize}{}}}
+\subsection{\code{activity$new()}}{
+  Initialize function for R6 activities class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{activity$new(
   trip_id,
   activity_id,
   ocean_code,
@@ -38,52 +39,35 @@ Initialize function for R6 activities class.
   objectoperation_label,
   objectoperation_id,
   elementarycatches
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification (unique topiaid from database).}
-
-\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification (unique topiaid from database).}
-
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification for the activity.}
-
-\item{\code{activity_date}}{Object of class {\link[base]{character}} expected. Activity date in format year month day.}
-
-\item{\code{activity_number}}{Object of class {\link[base]{integer}} expected. Activity number.}
-
-\item{\code{activity_latitude}}{Object of class {\link[base]{numeric}} expected. Latitude, in decimal degree, of the activity.}
-
-\item{\code{activity_longitude}}{Object of class {\link[base]{numeric}} expected. Longitude, in decimal degree, of the activity.}
-
-\item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
-
-\item{\code{set_count}}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
-
-\item{\code{set_success_status_code}}{Object of class {\link[base]{integer}} expected. Code status of the set.}
-
-\item{\code{set_success_status_label}}{Object of class {\link[base]{character}} expected. Label status of the set.}
-
-\item{\code{school_type_code}}{Object of class {\link[base]{integer}} expected. School type identification.}
-
-\item{\code{activity_code}}{Object of class {\link[base]{integer}} expected. Activity code identification.}
-
-\item{\code{activity_label}}{Object of class {\link[base]{character}} expected. Activity identification.}
-
-\item{\code{objectoperation_code}}{Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) code(s) identification, comma-separated if more than one.}
-
-\item{\code{objectoperation_label}}{Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) identification, comma-separated if more than one.}
-
-\item{\code{objectoperation_id}}{Object of class {\link[base]{character}} expected. Floating object(s) identification (unique topiaid from database), comma-separated if more than one.}
-
-\item{\code{elementarycatches}}{Object of type \link[base]{data.frame} or \link[tibble]{tbl_df} with elementarycatch(es) data expected for catch activities and NULL for other activities (default).}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Mandatory column names and types of elementarycatch(es) data:
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification (unique topiaid from database).}
+      \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification (unique topiaid from database).}
+      \item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification for the activity.}
+      \item{\code{activity_date}}{Object of class {\link[base]{character}} expected. Activity date in format year month day.}
+      \item{\code{activity_number}}{Object of class {\link[base]{integer}} expected. Activity number.}
+      \item{\code{activity_latitude}}{Object of class {\link[base]{numeric}} expected. Latitude, in decimal degree, of the activity.}
+      \item{\code{activity_longitude}}{Object of class {\link[base]{numeric}} expected. Longitude, in decimal degree, of the activity.}
+      \item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
+      \item{\code{set_count}}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
+      \item{\code{set_success_status_code}}{Object of class {\link[base]{integer}} expected. Code status of the set.}
+      \item{\code{set_success_status_label}}{Object of class {\link[base]{character}} expected. Label status of the set.}
+      \item{\code{school_type_code}}{Object of class {\link[base]{integer}} expected. School type identification.}
+      \item{\code{activity_code}}{Object of class {\link[base]{integer}} expected. Activity code identification.}
+      \item{\code{activity_label}}{Object of class {\link[base]{character}} expected. Activity identification.}
+      \item{\code{objectoperation_code}}{Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) code(s) identification, comma-separated if more than one.}
+      \item{\code{objectoperation_label}}{Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) identification, comma-separated if more than one.}
+      \item{\code{objectoperation_id}}{Object of class {\link[base]{character}} expected. Floating object(s) identification (unique topiaid from database), comma-separated if more than one.}
+      \item{\code{elementarycatches}}{Object of type \link[base]{data.frame} or \link[tibble]{tbl_df} with elementarycatch(es) data expected for catch activities and NULL for other activities (default).}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    Mandatory column names and types of elementarycatch(es) data:
 \itemize{
 \item{elementarycatch_id: } Elementary catch identification (class {\link[base]{character}}).
 \item{ocean_code: } Ocean identification (class {\link[base]{integer}}).
@@ -97,24 +81,26 @@ Mandatory column names and types of elementarycatch(es) data:
 \item{catch_weight:} Catch weight in tonnes (class {\link[base]{numeric}}).
 \item{catch_count:} Catch count in number of specimens caught (class {\link[base]{integer}}).
 }
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activity-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-activity-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{activity$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{activity$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{activity$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

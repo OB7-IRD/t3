@@ -12,66 +12,84 @@ export(t3_process)
 import(cli)
 import(furdeb)
 import(ggplot2)
-importFrom(DBI,SQL)
-importFrom(DBI,dbGetQuery)
-importFrom(DBI,sqlInterpolate)
+importFrom(DBI,
+  SQL,
+  dbGetQuery,
+  sqlInterpolate
+)
 importFrom(R6,R6Class)
-importFrom(adehabitatHR,getvolumeUD)
-importFrom(adehabitatHR,kernelUD)
+importFrom(adehabitatHR,
+  getvolumeUD,
+  kernelUD
+)
 importFrom(boot,boot.ci)
 importFrom(codama,r_type_checking)
-importFrom(dplyr,add_row)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,distinct)
-importFrom(dplyr,filter)
-importFrom(dplyr,first)
-importFrom(dplyr,full_join)
-importFrom(dplyr,group_by)
-importFrom(dplyr,inner_join)
-importFrom(dplyr,last)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,row_number)
-importFrom(dplyr,sample_n)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,tibble)
-importFrom(dplyr,ungroup)
+importFrom(dplyr,
+  add_row,
+  arrange,
+  bind_rows,
+  case_when,
+  distinct,
+  filter,
+  first,
+  full_join,
+  group_by,
+  inner_join,
+  last,
+  left_join,
+  mutate,
+  pull,
+  relocate,
+  rename,
+  row_number,
+  sample_n,
+  select,
+  summarise,
+  tibble,
+  ungroup
+)
 importFrom(ggpubr,ggarrange)
-importFrom(lubridate,days)
-importFrom(lubridate,dhours)
-importFrom(lubridate,dminutes)
-importFrom(lubridate,dseconds)
-importFrom(lubridate,hms)
-importFrom(lubridate,int_length)
-importFrom(lubridate,interval)
-importFrom(lubridate,month)
-importFrom(lubridate,parse_date_time)
-importFrom(lubridate,year)
+importFrom(lubridate,
+  days,
+  dhours,
+  dminutes,
+  dseconds,
+  hms,
+  int_length,
+  interval,
+  month,
+  parse_date_time,
+  year
+)
 importFrom(magrittr,"%>%")
-importFrom(ranger,importance)
-importFrom(ranger,predictions)
-importFrom(ranger,ranger)
+importFrom(ranger,
+  importance,
+  predictions,
+  ranger
+)
 importFrom(sf,st_as_sf)
-importFrom(sp,CRS)
-importFrom(sp,SpatialPoints)
-importFrom(sp,coordinates)
-importFrom(sp,fullgrid)
-importFrom(sp,gridded)
-importFrom(sp,proj4string)
-importFrom(sp,spTransform)
-importFrom(stats,predict)
-importFrom(stats,rnorm)
-importFrom(stringr,str_c)
-importFrom(stringr,str_extract)
+importFrom(sp,
+  CRS,
+  SpatialPoints,
+  coordinates,
+  fullgrid,
+  gridded,
+  proj4string,
+  spTransform
+)
+importFrom(stats,
+  predict,
+  rnorm
+)
+importFrom(stringr,
+  str_c,
+  str_extract
+)
 importFrom(suncalc,getSunlightTimes)
-importFrom(tidyr,crossing)
-importFrom(tidyr,fill)
-importFrom(tidyr,gather)
-importFrom(tidyr,spread)
-importFrom(tidyr,tibble)
+importFrom(tidyr,
+  crossing,
+  fill,
+  gather,
+  spread,
+  tibble
+)

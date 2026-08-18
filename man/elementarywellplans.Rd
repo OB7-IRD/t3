@@ -7,98 +7,104 @@
 Create R6 reference object class elementarywellplans
 }
 \section{Super class}{
-\code{\link[t3:list_t3]{t3::list_t3}} -> \code{elementarywellplans}
+\code{\link[t3:list_t3]{list_t3}} -> \code{elementarywellplans}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-elementarywellplans-new}{\code{elementarywellplans$new()}}
-\item \href{#method-elementarywellplans-add}{\code{elementarywellplans$add()}}
-\item \href{#method-elementarywellplans-filter_by_trip}{\code{elementarywellplans$filter_by_trip()}}
-\item \href{#method-elementarywellplans-clone}{\code{elementarywellplans$clone()}}
+  \itemize{
+    \item \href{#method-elementarywellplans-initialize}{\code{elementarywellplans$new()}}
+    \item \href{#method-elementarywellplans-add}{\code{elementarywellplans$add()}}
+    \item \href{#method-elementarywellplans-filter_by_trip}{\code{elementarywellplans$filter_by_trip()}}
+    \item \href{#method-elementarywellplans-clone}{\code{elementarywellplans$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>t3::list_t3$count()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>t3::list_t3$extract()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>t3::list_t3$filter()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>t3::list_t3$filter_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>t3::list_t3$modification_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>t3::list_t3$name()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>t3::list_t3$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>t3::list_t3$view()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>list_t3$count()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>list_t3$extract()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>list_t3$extract_l1_element_value()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>list_t3$filter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>list_t3$filter_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>list_t3$modification_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>list_t3$name()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>list_t3$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>list_t3$view()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-elementarywellplans-new"></a>}}
-\if{latex}{\out{\hypertarget{method-elementarywellplans-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 elementarywellplans class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarywellplans$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-elementarywellplans-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplans-initialize}{}}}
+\subsection{\code{elementarywellplans$new()}}{
+  Initialize function for R6 elementarywellplans class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarywellplans$new(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{(empty, list or R6-elementarywellplan classes) Nothing, a list of object R6-elementarywellplan classes or one object R6-elementarywellplan classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{(empty, list or R6-elementarywellplan classes) Nothing, a list of object R6-elementarywellplan classes or one object R6-elementarywellplan classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarywellplans-add"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarywellplans-add}{}}}
-\subsection{Method \code{add()}}{
-Function for add a new elementarywellplan in the object elementarywellplans.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarywellplans$add(new_item)}\if{html}{\out{</div>}}
+\subsection{\code{elementarywellplans$add()}}{
+  Function for add a new elementarywellplan in the object elementarywellplans.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarywellplans$add(new_item)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{new_item}}{(list or R6-elementarywellplan classes) A list of object R6-elementarywellplan classes or one object R6-elementarywellplan classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{new_item}}{(list or R6-elementarywellplan classes) A list of object R6-elementarywellplan classes or one object R6-elementarywellplan classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarywellplans-filter_by_trip"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarywellplans-filter_by_trip}{}}}
-\subsection{Method \code{filter_by_trip()}}{
-Function for filter elementarywellplans by trip identification.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarywellplans$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
+\subsection{\code{elementarywellplans$filter_by_trip()}}{
+  Function for filter elementarywellplans by trip identification.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarywellplans$filter_by_trip(trip_id)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{(character) Trip identification.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{(character) Trip identification.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarywellplans-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarywellplans-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarywellplans$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{elementarywellplans$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarywellplans$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

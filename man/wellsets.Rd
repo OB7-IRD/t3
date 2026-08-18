@@ -7,98 +7,104 @@
 Create R6 reference object class wellsets
 }
 \section{Super class}{
-\code{\link[t3:list_t3]{t3::list_t3}} -> \code{wellsets}
+\code{\link[t3:list_t3]{list_t3}} -> \code{wellsets}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-wellsets-new}{\code{wellsets$new()}}
-\item \href{#method-wellsets-add}{\code{wellsets$add()}}
-\item \href{#method-wellsets-filter_by_trip}{\code{wellsets$filter_by_trip()}}
-\item \href{#method-wellsets-clone}{\code{wellsets$clone()}}
+  \itemize{
+    \item \href{#method-wellsets-initialize}{\code{wellsets$new()}}
+    \item \href{#method-wellsets-add}{\code{wellsets$add()}}
+    \item \href{#method-wellsets-filter_by_trip}{\code{wellsets$filter_by_trip()}}
+    \item \href{#method-wellsets-clone}{\code{wellsets$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>t3::list_t3$count()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>t3::list_t3$extract()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>t3::list_t3$filter()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>t3::list_t3$filter_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>t3::list_t3$modification_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>t3::list_t3$name()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>t3::list_t3$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>t3::list_t3$view()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>list_t3$count()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>list_t3$extract()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>list_t3$extract_l1_element_value()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>list_t3$filter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>list_t3$filter_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>list_t3$modification_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>list_t3$name()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>list_t3$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>list_t3$view()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-wellsets-new"></a>}}
-\if{latex}{\out{\hypertarget{method-wellsets-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 wellsets class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{wellsets$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-wellsets-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-wellsets-initialize}{}}}
+\subsection{\code{wellsets$new()}}{
+  Initialize function for R6 wellsets class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{wellsets$new(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{(empty, list or R6-wellset classes) Nothing, a list of object R6-wellset classes or one object R6-wellset classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{(empty, list or R6-wellset classes) Nothing, a list of object R6-wellset classes or one object R6-wellset classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-wellsets-add"></a>}}
 \if{latex}{\out{\hypertarget{method-wellsets-add}{}}}
-\subsection{Method \code{add()}}{
-Function for add a new wellset in the object wellsets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{wellsets$add(new_item)}\if{html}{\out{</div>}}
+\subsection{\code{wellsets$add()}}{
+  Function for add a new wellset in the object wellsets.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{wellsets$add(new_item)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{new_item}}{(list or R6-wellset classes) A list of object R6-wellset classes or one object R6-wellset classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{new_item}}{(list or R6-wellset classes) A list of object R6-wellset classes or one object R6-wellset classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-wellsets-filter_by_trip"></a>}}
 \if{latex}{\out{\hypertarget{method-wellsets-filter_by_trip}{}}}
-\subsection{Method \code{filter_by_trip()}}{
-Function for filter wellsets by trip identification.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{wellsets$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
+\subsection{\code{wellsets$filter_by_trip()}}{
+  Function for filter wellsets by trip identification.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{wellsets$filter_by_trip(trip_id)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{(character) Trip identification.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{(character) Trip identification.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-wellsets-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-wellsets-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{wellsets$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{wellsets$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{wellsets$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

@@ -8,26 +8,27 @@ Create R6 reference object class object_model_data
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-object_model_data-trips_object_creation}{\code{object_model_data$trips_object_creation()}}
-\item \href{#method-object_model_data-activities_object_creation}{\code{object_model_data$activities_object_creation()}}
-\item \href{#method-object_model_data-elementarylandings_object_creation}{\code{object_model_data$elementarylandings_object_creation()}}
-\item \href{#method-object_model_data-wells_object_creation}{\code{object_model_data$wells_object_creation()}}
-\item \href{#method-object_model_data-setdurationrefs_data}{\code{object_model_data$setdurationrefs_data()}}
-\item \href{#method-object_model_data-lengthsteps_data}{\code{object_model_data$lengthsteps_data()}}
-\item \href{#method-object_model_data-samplesets_data}{\code{object_model_data$samplesets_data()}}
-\item \href{#method-object_model_data-lengthweightrelationships_data}{\code{object_model_data$lengthweightrelationships_data()}}
-\item \href{#method-object_model_data-activitycoderefs_data}{\code{object_model_data$activitycoderefs_data()}}
-\item \href{#method-object_model_data-clone}{\code{object_model_data$clone()}}
-}
+  \itemize{
+    \item \href{#method-object_model_data-trips_object_creation}{\code{object_model_data$trips_object_creation()}}
+    \item \href{#method-object_model_data-activities_object_creation}{\code{object_model_data$activities_object_creation()}}
+    \item \href{#method-object_model_data-elementarylandings_object_creation}{\code{object_model_data$elementarylandings_object_creation()}}
+    \item \href{#method-object_model_data-wells_object_creation}{\code{object_model_data$wells_object_creation()}}
+    \item \href{#method-object_model_data-setdurationrefs_data}{\code{object_model_data$setdurationrefs_data()}}
+    \item \href{#method-object_model_data-lengthsteps_data}{\code{object_model_data$lengthsteps_data()}}
+    \item \href{#method-object_model_data-samplesets_data}{\code{object_model_data$samplesets_data()}}
+    \item \href{#method-object_model_data-lengthweightrelationships_data}{\code{object_model_data$lengthweightrelationships_data()}}
+    \item \href{#method-object_model_data-activitycoderefs_data}{\code{object_model_data$activitycoderefs_data()}}
+    \item \href{#method-object_model_data-clone}{\code{object_model_data$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-trips_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-trips_object_creation}{}}}
-\subsection{Method \code{trips_object_creation()}}{
-Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$trips_object_creation(
+\subsection{\code{object_model_data$trips_object_creation()}}{
+  Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$trips_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
@@ -38,29 +39,23 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
   trip_ids = NULL,
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
-
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
-
-\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) ISO 3 code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
-
-\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+      \item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) ISO 3 code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
+      \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:
 \itemize{
 \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
@@ -70,23 +65,22 @@ Reference table defining the logbook programs to be considered in Observe databa
 }
 Mandatory for \code{data_source = "observe_database"}.
 By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}
-
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+      \item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-activities_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-activities_object_creation}{}}}
-\subsection{Method \code{activities_object_creation()}}{
-Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
+\subsection{\code{object_model_data$activities_object_creation()}}{
+  Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$activities_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
   weight_categories_avdth_ref = NULL,
@@ -99,21 +93,19 @@ Creation of a R6 reference object of class activities which contain one or more 
   trip_ids = NULL,
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
 and mandatory argument for data source "avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
-
-\item{\code{weight_categories_avdth_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{weight_categories_avdth_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook weight categories with the following columns:
 \itemize{
 \item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{character}}.
@@ -123,18 +115,12 @@ Reference table defining the logbook weight categories with the following column
 }
 Mandatory for \code{data_source = "avdth_database"}.
 By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
-
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
-
-\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
-
-\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{species_fate_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+      \item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
+      \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{species_fate_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:
 \itemize{
 \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
@@ -144,23 +130,22 @@ Reference table defining the logbook programs to be considered in Observe databa
 }
 Mandatory for \code{data_source = "observe_database"}.
 By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}
-
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+      \item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-elementarylandings_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-elementarylandings_object_creation}{}}}
-\subsection{Method \code{elementarylandings_object_creation()}}{
-Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarylandings_object_creation(
+\subsection{\code{object_model_data$elementarylandings_object_creation()}}{
+  Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$elementarylandings_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
@@ -171,29 +156,23 @@ Creation of a R6 reference object class elementarylandings which contain one or 
   trip_ids = NULL,
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
-
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
-
-\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
-
-\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+      \item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
+      \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:
 \itemize{
 \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
@@ -203,23 +182,22 @@ Reference table defining the logbook programs to be considered in Observe databa
 }
 Mandatory for \code{data_source = "observe_database"}.
 By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}
-
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+      \item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-wells_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-wells_object_creation}{}}}
-\subsection{Method \code{wells_object_creation()}}{
-Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(
+\subsection{\code{object_model_data$wells_object_creation()}}{
+  Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$wells_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
@@ -232,31 +210,24 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   data_path_sample = NULL,
   data_path_wellplan = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
-
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
-
-\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
-
-\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{sample_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
-
-\item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+      \item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
+      \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{sample_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
+      \item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:
 \itemize{
 \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
@@ -266,75 +237,73 @@ Reference table defining the logbook programs to be considered in Observe databa
 }
 Mandatory for \code{data_source = "observe_database"}.
 By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}
-
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
-
-\item{\code{data_path_sample}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for samples.}
-
-\item{\code{data_path_wellplan}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for well plans.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+      \item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+      \item{\code{data_path_sample}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for samples.}
+      \item{\code{data_path_wellplan}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for well plans.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-setdurationrefs_data"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-setdurationrefs_data}{}}}
-\subsection{Method \code{setdurationrefs_data()}}{
-Creation of a data frame object with parameters of set duration algorithms.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$setdurationrefs_data(
+\subsection{\code{object_model_data$setdurationrefs_data()}}{
+  Creation of a data frame object with parameters of set duration algorithms.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$setdurationrefs_data(
   data_source = "csv_file",
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-lengthsteps_data"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-lengthsteps_data}{}}}
-\subsection{Method \code{lengthsteps_data()}}{
-Creation of a data frame object with length ratio between ld1 and lf class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthsteps_data(
+\subsection{\code{object_model_data$lengthsteps_data()}}{
+  Creation of a data frame object with length ratio between ld1 and lf class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$lengthsteps_data(
   data_source = "csv_file",
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-samplesets_data"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-samplesets_data}{}}}
-\subsection{Method \code{samplesets_data()}}{
-Creation of a data frame object with weighted weight of each set sampled.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$samplesets_data(
+\subsection{\code{object_model_data$samplesets_data()}}{
+  Creation of a data frame object with weighted weight of each set sampled.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$samplesets_data(
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
@@ -345,29 +314,23 @@ Creation of a data frame object with weighted weight of each set sampled.
   trip_ids = NULL,
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
-
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
-
-\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
-
-\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+      \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+      \item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
+      \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+      \item{\code{observe_logbook_program}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:
 \itemize{
 \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
@@ -377,85 +340,84 @@ Reference table defining the logbook programs to be considered in Observe databa
 }
 Mandatory for \code{data_source = "observe_database"}.
 By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}
-
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+      \item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-lengthweightrelationships_data"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-lengthweightrelationships_data}{}}}
-\subsection{Method \code{lengthweightrelationships_data()}}{
-Creation of a data frame object with parameters for length weight relationship.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationships_data(
+\subsection{\code{object_model_data$lengthweightrelationships_data()}}{
+  Creation of a data frame object with parameters for length weight relationship.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$lengthweightrelationships_data(
   data_source = "observe_database",
   database_connection = NULL,
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-activitycoderefs_data"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-activitycoderefs_data}{}}}
-\subsection{Method \code{activitycoderefs_data()}}{
-Creation of reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+\subsection{\code{object_model_data$activitycoderefs_data()}}{
+  Creation of reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
  and/or searching time and/or set duration..
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$activitycoderefs_data(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$activitycoderefs_data(
   data_source = "csv_file",
   data_path = NULL,
   envir = NULL
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
+      \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
+      \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-object_model_data-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{object_model_data$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{object_model_data$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

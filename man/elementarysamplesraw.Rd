@@ -7,98 +7,104 @@
 Create R6 reference object class elementarysamplesraw
 }
 \section{Super class}{
-\code{\link[t3:list_t3]{t3::list_t3}} -> \code{elementarysamplesraw}
+\code{\link[t3:list_t3]{list_t3}} -> \code{elementarysamplesraw}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-elementarysamplesraw-new}{\code{elementarysamplesraw$new()}}
-\item \href{#method-elementarysamplesraw-add}{\code{elementarysamplesraw$add()}}
-\item \href{#method-elementarysamplesraw-filter_by_trip}{\code{elementarysamplesraw$filter_by_trip()}}
-\item \href{#method-elementarysamplesraw-clone}{\code{elementarysamplesraw$clone()}}
+  \itemize{
+    \item \href{#method-elementarysamplesraw-initialize}{\code{elementarysamplesraw$new()}}
+    \item \href{#method-elementarysamplesraw-add}{\code{elementarysamplesraw$add()}}
+    \item \href{#method-elementarysamplesraw-filter_by_trip}{\code{elementarysamplesraw$filter_by_trip()}}
+    \item \href{#method-elementarysamplesraw-clone}{\code{elementarysamplesraw$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>t3::list_t3$count()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>t3::list_t3$extract()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>t3::list_t3$filter()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>t3::list_t3$filter_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>t3::list_t3$modification_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>t3::list_t3$name()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>t3::list_t3$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>t3::list_t3$view()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>list_t3$count()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>list_t3$extract()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>list_t3$extract_l1_element_value()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>list_t3$filter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>list_t3$filter_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>list_t3$modification_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>list_t3$name()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>list_t3$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>list_t3$view()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-elementarysamplesraw-new"></a>}}
-\if{latex}{\out{\hypertarget{method-elementarysamplesraw-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 elementarysamplesraw class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarysamplesraw$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-elementarysamplesraw-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarysamplesraw-initialize}{}}}
+\subsection{\code{elementarysamplesraw$new()}}{
+  Initialize function for R6 elementarysamplesraw class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarysamplesraw$new(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{(empty, list or R6-elementarysampleraw classes) Nothing, a list of object R6-elementarysampleraw classes or one object R6-elementarysampleraw classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{(empty, list or R6-elementarysampleraw classes) Nothing, a list of object R6-elementarysampleraw classes or one object R6-elementarysampleraw classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarysamplesraw-add"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarysamplesraw-add}{}}}
-\subsection{Method \code{add()}}{
-Function for add a new elementarysampleraw in the object elementarysamplesraw.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarysamplesraw$add(new_item)}\if{html}{\out{</div>}}
+\subsection{\code{elementarysamplesraw$add()}}{
+  Function for add a new elementarysampleraw in the object elementarysamplesraw.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarysamplesraw$add(new_item)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{new_item}}{(list or R6-elementarysampleraw classes) A list of object R6-elementarysampleraw classes or one object R6-elementarysampleraw classes.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{new_item}}{(list or R6-elementarysampleraw classes) A list of object R6-elementarysampleraw classes or one object R6-elementarysampleraw classes.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarysamplesraw-filter_by_trip"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarysamplesraw-filter_by_trip}{}}}
-\subsection{Method \code{filter_by_trip()}}{
-Function for filter elementarysamplesraw by trip identification.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarysamplesraw$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
+\subsection{\code{elementarysamplesraw$filter_by_trip()}}{
+  Function for filter elementarysamplesraw by trip identification.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarysamplesraw$filter_by_trip(trip_id)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{(character) Trip identification.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{(character) Trip identification.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarysamplesraw-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarysamplesraw-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{elementarysamplesraw$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{elementarysamplesraw$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{elementarysamplesraw$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

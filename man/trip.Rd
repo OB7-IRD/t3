@@ -8,18 +8,19 @@ Create R6 reference object class trip
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-trip-new}{\code{trip$new()}}
-\item \href{#method-trip-clone}{\code{trip$clone()}}
-}
+  \itemize{
+    \item \href{#method-trip-initialize}{\code{trip$new()}}
+    \item \href{#method-trip-clone}{\code{trip$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-trip-new"></a>}}
-\if{latex}{\out{\hypertarget{method-trip-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize function for R6 trip class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{trip$new(
+\if{html}{\out{<a id="method-trip-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-trip-initialize}{}}}
+\subsection{\code{trip$new()}}{
+  Initialize function for R6 trip class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{trip$new(
   trip_id,
   flag_code,
   departure_date,
@@ -29,48 +30,43 @@ Initialize function for R6 trip class.
   vessel_code,
   vessel_type_code,
   ocean_code
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
+      \item{\code{flag_code}}{Object of class {\link[base]{character}} expected. Fleet identification.}
+      \item{\code{departure_date}}{Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.}
+      \item{\code{trip_end_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.}
+      \item{\code{logbook_availability_code}}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
+      \item{\code{landing_well_content_code}}{Object of class {\link[base]{integer}} expected. Inform if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
+      \item{\code{vessel_code}}{Object of class {\link[base]{integer}} expected. Vessel identification.}
+      \item{\code{vessel_type_code}}{Object of class {\link[base]{character}} expected. Vessel type identification.}
+      \item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification for the trip.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
-
-\item{\code{flag_code}}{Object of class {\link[base]{character}} expected. Fleet identification.}
-
-\item{\code{departure_date}}{Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.}
-
-\item{\code{trip_end_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.}
-
-\item{\code{logbook_availability_code}}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
-
-\item{\code{landing_well_content_code}}{Object of class {\link[base]{integer}} expected. Inform if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
-
-\item{\code{vessel_code}}{Object of class {\link[base]{integer}} expected. Vessel identification.}
-
-\item{\code{vessel_type_code}}{Object of class {\link[base]{character}} expected. Vessel type identification.}
-
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification for the trip.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trip-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-trip-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{trip$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{trip$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{trip$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Jeanne Clément \email{jeanne.clement@ird.fr} (\href{https://orcid.org/0000-0002-5228-5015}{ORCID})
   \item Mathieu Depetris \email{mathieu.depetris@ird.fr} (\href{https://orcid.org/0000-0001-8080-0531}{ORCID})
   \item Antoine Duparc \email{antoine.duparc@ird.fr} (\href{https://orcid.org/0000-0001-6135-9015}{ORCID})
   \item Pascal Cauquil \email{pascal.cauquil@ird.fr} (\href{https://orcid.org/0000-0003-0718-8950}{ORCID})
