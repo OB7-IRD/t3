@@ -1,4 +1,10 @@
-# t3 4.0.0 - 2026-05-11
+# t3 4.0.2 - 2026-08-26
+
+## Changed
+
+Correction in level 3.5 for case of activities in other ocean than target_ocean
+
+# t3 4.0.1 - 2026-05-11
 
 ## Changed
 
