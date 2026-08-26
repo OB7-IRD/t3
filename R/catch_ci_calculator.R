@@ -40,9 +40,11 @@ catch_ci_calculator <- function(fit_data,
     # nominal catch or catch effort
     if (!("cwp" %in% colnames(fit_data))) {
       # by fishing mode or not
-      ifelse(!("fmod" %in% colnames(fit_data)), #is.null(fit_data$fmod),
+      ifelse(!("fmod" %in% colnames(fit_data)),
+             #is.null(fit_data$fmod),
              # nominal catch total
-             output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)),
+             output <- do.call(rbind,
+                               lapply(seq.int(1, nrow(fit_data)),
                                             function (x) {
                                               tmp <- df2boot(t0 = fit_data$catch_set_fit[x],
                                                              t = as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x]]), # bootstrap values)
@@ -52,9 +54,13 @@ catch_ci_calculator <- function(fit_data,
                                                                   conf = 0.95,
                                                                   type = c("basic", "norm","perc"))
 
-                                              output_ci <- cbind (fit_data[x,],
-                                                                  data.frame(ci_inf = ci$percent[, c(4)],
-                                                                             ci_sup = ci$percent[, c(5)]))
+                                              output_ci <- cbind(fit_data[x,],
+                                                                 data.frame(ci_inf = ifelse(is.null(ci),
+                                                                                            fit_data$catch_set_fit[x],
+                                                                                            ci$percent[, c(4)]),
+                                                                            ci_sup = ifelse(is.null(ci),
+                                                                                            fit_data$catch_set_fit[x],
+                                                                                            ci$percent[, c(5)])))
                                               return(output_ci)
                                             })),
              # nominal catch by fishing mode
@@ -68,10 +74,13 @@ catch_ci_calculator <- function(fit_data,
                                               ci <- boot::boot.ci(tmp,
                                                                   conf = 0.95,
                                                                   type = c("basic", "norm","perc"))
-
-                                              output_ci <- cbind (fit_data[x,],
-                                                                  data.frame(ci_inf = ci$percent[, c(4)],
-                                                                             ci_sup = ci$percent[, c(5)]))
+                                              output_ci <- cbind(fit_data[x,],
+                                                                  data.frame(ci_inf = ifelse(is.null(ci),
+                                                                                             fit_data$catch_set_fit[x],
+                                                                                             ci$percent[, c(4)]),
+                                                                             ci_sup = ifelse(is.null(ci),
+                                                                                             fit_data$catch_set_fit[x],
+                                                                                             ci$percent[, c(5)])))
 
                                               return(output_ci)
                                             }))
@@ -116,7 +125,7 @@ catch_ci_calculator <- function(fit_data,
                                                                                ci_sup = fit_data$catch_set_fit[x]))
                                               } else {
                                                 tmp <- df2boot(t0 = fit_data$catch_set_fit[x] ,
-                                                               t =t,
+                                                               t = t,
                                                                R = max(boot_data$loop) # number of loop
                                                 )
                                                 ci <- boot::boot.ci(tmp,
