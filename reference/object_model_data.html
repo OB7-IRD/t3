@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class object_model_data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/object_model_data.R" class="external-link"><code>R/object_model_data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/object_model_data.R" class="external-link"><code>R/object_model_data.R</code></a></small>
     <div class="hidden name"><code>object_model_data.Rd</code></div>
     </div>
 
@@ -85,8 +85,7 @@
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-object_model_data-trips_object_creation"><code>object_model_data$trips_object_creation()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-object_model_data-trips_object_creation"><code>object_model_data$trips_object_creation()</code></a></p></li>
 <li><p><a href="#method-object_model_data-activities_object_creation"><code>object_model_data$activities_object_creation()</code></a></p></li>
 <li><p><a href="#method-object_model_data-elementarylandings_object_creation"><code>object_model_data$elementarylandings_object_creation()</code></a></p></li>
 <li><p><a href="#method-object_model_data-wells_object_creation"><code>object_model_data$wells_object_creation()</code></a></p></li>
@@ -97,7 +96,7 @@
 <li><p><a href="#method-object_model_data-activitycoderefs_data"><code>object_model_data$activitycoderefs_data()</code></a></p></li>
 <li><p><a href="#method-object_model_data-clone"><code>object_model_data$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-object_model_data-trips_object_creation"></a><div class="section">
-<h3 id="method-trips-object-creation-">Method <code>trips_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-trips-object-creation-"></a></h3>
+<h3 id="object-model-data-trips-object-creation-"><code>object_model_data$trips_object_creation()</code><a class="anchor" aria-label="anchor" href="#object-model-data-trips-object-creation-"></a></h3>
 <p>Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span></span>
@@ -112,39 +111,31 @@
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>database_connection</code></dt>
+      <dt><code>database_connection</code></dt>
 <dd><p>Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html" class="external-link">`furdeb::postgresql_dbconnection()`</a>.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.</p></dd>
 
-
-<dt><code>years_period</code></dt>
+      <dt><code>years_period</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>flag_codes</code></dt>
+      <dt><code>flag_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Three letters country(ies) ISO 3 code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>ocean_codes</code></dt>
+      <dt><code>ocean_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.</p></dd>
 
-
-<dt><code>vessel_type_codes</code></dt>
+      <dt><code>vessel_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>observe_logbook_program</code></dt>
+      <dt><code>observe_logbook_program</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>organism:  organism using the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>topiaid:  topiaid of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -153,24 +144,23 @@ Reference table defining the logbook programs to be considered in Observe databa
 </ul><p>Mandatory for <code>data_source = "observe_database"</code>.
 By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
-
-<dt><code>trip_ids</code></dt>
+      <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data csv/RData file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-activities_object_creation"></a><div class="section">
-<h3 id="method-activities-object-creation-">Method <code>activities_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-activities-object-creation-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-activities_object_creation"></a><div class="section">
+<h3 id="object-model-data-activities-object-creation-"><code>object_model_data$activities_object_creation()</code><a class="anchor" aria-label="anchor" href="#object-model-data-activities-object-creation-"></a></h3>
 <p>Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span></span>
@@ -187,23 +177,19 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>database_connection</code></dt>
+      <dt><code>database_connection</code></dt>
 <dd><p>Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html" class="external-link">`furdeb::postgresql_dbconnection()`</a>.
 and mandatory argument for data source "avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.</p></dd>
 
-
-<dt><code>weight_categories_avdth_ref</code></dt>
+      <dt><code>weight_categories_avdth_ref</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
 Reference table defining the logbook weight categories with the following columns:</p><ul><li><p>avdth_weight_category_code:  Logbook weight category code from avdth database, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -212,28 +198,22 @@ Reference table defining the logbook weight categories with the following column
 </ul><p>Mandatory for <code>data_source = "avdth_database"</code>.
 By default the referential table <code>data("weight_categories_avdth_ref", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html">weight_categories_avdth_ref</a>).</p></dd>
 
-
-<dt><code>years_period</code></dt>
+      <dt><code>years_period</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>flag_codes</code></dt>
+      <dt><code>flag_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>ocean_codes</code></dt>
+      <dt><code>ocean_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.</p></dd>
 
-
-<dt><code>vessel_type_codes</code></dt>
+      <dt><code>vessel_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>species_fate_codes</code></dt>
+      <dt><code>species_fate_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>observe_logbook_program</code></dt>
+      <dt><code>observe_logbook_program</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>organism:  organism using the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>topiaid:  topiaid of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -242,24 +222,23 @@ Reference table defining the logbook programs to be considered in Observe databa
 </ul><p>Mandatory for <code>data_source = "observe_database"</code>.
 By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
-
-<dt><code>trip_ids</code></dt>
+      <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data csv/RData file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-elementarylandings_object_creation"></a><div class="section">
-<h3 id="method-elementarylandings-object-creation-">Method <code>elementarylandings_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-elementarylandings-object-creation-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-elementarylandings_object_creation"></a><div class="section">
+<h3 id="object-model-data-elementarylandings-object-creation-"><code>object_model_data$elementarylandings_object_creation()</code><a class="anchor" aria-label="anchor" href="#object-model-data-elementarylandings-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span></span>
@@ -274,39 +253,31 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>database_connection</code></dt>
+      <dt><code>database_connection</code></dt>
 <dd><p>Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html" class="external-link">`furdeb::postgresql_dbconnection()`</a>.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.</p></dd>
 
-
-<dt><code>years_period</code></dt>
+      <dt><code>years_period</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>flag_codes</code></dt>
+      <dt><code>flag_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>ocean_codes</code></dt>
+      <dt><code>ocean_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.</p></dd>
 
-
-<dt><code>vessel_type_codes</code></dt>
+      <dt><code>vessel_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>observe_logbook_program</code></dt>
+      <dt><code>observe_logbook_program</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>organism:  organism using the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>topiaid:  topiaid of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -315,24 +286,23 @@ Reference table defining the logbook programs to be considered in Observe databa
 </ul><p>Mandatory for <code>data_source = "observe_database"</code>.
 By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
-
-<dt><code>trip_ids</code></dt>
+      <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data csv/RData file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-wells_object_creation"></a><div class="section">
-<h3 id="method-wells-object-creation-">Method <code>wells_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-wells-object-creation-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-wells_object_creation"></a><div class="section">
+<h3 id="object-model-data-wells-object-creation-"><code>object_model_data$wells_object_creation()</code><a class="anchor" aria-label="anchor" href="#object-model-data-wells-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span></span>
@@ -349,43 +319,34 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path_wellplan <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>database_connection</code></dt>
+      <dt><code>database_connection</code></dt>
 <dd><p>Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html" class="external-link">`furdeb::postgresql_dbconnection()`</a>.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.</p></dd>
 
-
-<dt><code>years_period</code></dt>
+      <dt><code>years_period</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>flag_codes</code></dt>
+      <dt><code>flag_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>ocean_codes</code></dt>
+      <dt><code>ocean_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.</p></dd>
 
-
-<dt><code>vessel_type_codes</code></dt>
+      <dt><code>vessel_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>sample_type_codes</code></dt>
+      <dt><code>sample_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Sample type identification.</p></dd>
 
-
-<dt><code>observe_logbook_program</code></dt>
+      <dt><code>observe_logbook_program</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>organism:  organism using the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>topiaid:  topiaid of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -394,28 +355,26 @@ Reference table defining the logbook programs to be considered in Observe databa
 </ul><p>Mandatory for <code>data_source = "observe_database"</code>.
 By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
-
-<dt><code>trip_ids</code></dt>
+      <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
-
-<dt><code>data_path_sample</code></dt>
+      <dt><code>data_path_sample</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data sql/csv file for samples.</p></dd>
 
-
-<dt><code>data_path_wellplan</code></dt>
+      <dt><code>data_path_wellplan</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data sql/csv file for well plans.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-setdurationrefs_data"></a><div class="section">
-<h3 id="method-setdurationrefs-data-">Method <code>setdurationrefs_data()</code><a class="anchor" aria-label="anchor" href="#method-setdurationrefs-data-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-setdurationrefs_data"></a><div class="section">
+<h3 id="object-model-data-setdurationrefs-data-"><code>object_model_data$setdurationrefs_data()</code><a class="anchor" aria-label="anchor" href="#object-model-data-setdurationrefs-data-"></a></h3>
 <p>Creation of a data frame object with parameters of set duration algorithms.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span></span>
@@ -423,27 +382,25 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-lengthsteps_data"></a><div class="section">
-<h3 id="method-lengthsteps-data-">Method <code>lengthsteps_data()</code><a class="anchor" aria-label="anchor" href="#method-lengthsteps-data-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-lengthsteps_data"></a><div class="section">
+<h3 id="object-model-data-lengthsteps-data-"><code>object_model_data$lengthsteps_data()</code><a class="anchor" aria-label="anchor" href="#object-model-data-lengthsteps-data-"></a></h3>
 <p>Creation of a data frame object with length ratio between ld1 and lf class.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthsteps_data</span><span class="op">(</span></span>
@@ -451,27 +408,25 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-samplesets_data"></a><div class="section">
-<h3 id="method-samplesets-data-">Method <code>samplesets_data()</code><a class="anchor" aria-label="anchor" href="#method-samplesets-data-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-samplesets_data"></a><div class="section">
+<h3 id="object-model-data-samplesets-data-"><code>object_model_data$samplesets_data()</code><a class="anchor" aria-label="anchor" href="#object-model-data-samplesets-data-"></a></h3>
 <p>Creation of a data frame object with weighted weight of each set sampled.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span></span>
@@ -486,39 +441,31 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>database_connection</code></dt>
+      <dt><code>database_connection</code></dt>
 <dd><p>Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html" class="external-link">`furdeb::postgresql_dbconnection()`</a>.
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by <a href="https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html" class="external-link">`furdeb::access_dbconnection()`</a>.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.</p></dd>
 
-
-<dt><code>years_period</code></dt>
+      <dt><code>years_period</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>flag_codes</code></dt>
+      <dt><code>flag_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>ocean_codes</code></dt>
+      <dt><code>ocean_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.</p></dd>
 
-
-<dt><code>vessel_type_codes</code></dt>
+      <dt><code>vessel_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
-
-<dt><code>observe_logbook_program</code></dt>
+      <dt><code>observe_logbook_program</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>organism:  organism using the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>topiaid:  topiaid of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -527,24 +474,23 @@ Reference table defining the logbook programs to be considered in Observe databa
 </ul><p>Mandatory for <code>data_source = "observe_database"</code>.
 By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
-
-<dt><code>trip_ids</code></dt>
+      <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data csv/RData file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-lengthweightrelationships_data"></a><div class="section">
-<h3 id="method-lengthweightrelationships-data-">Method <code>lengthweightrelationships_data()</code><a class="anchor" aria-label="anchor" href="#method-lengthweightrelationships-data-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-lengthweightrelationships_data"></a><div class="section">
+<h3 id="object-model-data-lengthweightrelationships-data-"><code>object_model_data$lengthweightrelationships_data()</code><a class="anchor" aria-label="anchor" href="#object-model-data-lengthweightrelationships-data-"></a></h3>
 <p>Creation of a data frame object with parameters for length weight relationship.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthweightrelationships_data</span><span class="op">(</span></span>
@@ -553,31 +499,28 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>database_connection</code></dt>
+      <dt><code>database_connection</code></dt>
 <dd><p>Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Path of the data file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-activitycoderefs_data"></a><div class="section">
-<h3 id="method-activitycoderefs-data-">Method <code>activitycoderefs_data()</code><a class="anchor" aria-label="anchor" href="#method-activitycoderefs-data-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-activitycoderefs_data"></a><div class="section">
+<h3 id="object-model-data-activitycoderefs-data-"><code>object_model_data$activitycoderefs_data()</code><a class="anchor" aria-label="anchor" href="#object-model-data-activitycoderefs-data-"></a></h3>
 <p>Creation of reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
  and/or searching time and/or set duration..</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
@@ -586,33 +529,29 @@ By default the referential table <code>data("observe_logbook_program", package="
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).</p></dd>
 
-
-<dt><code>data_path</code></dt>
+      <dt><code>data_path</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.</p></dd>
 
-
-<dt><code>envir</code></dt>
+      <dt><code>envir</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Specify an environment to look in for data source "envir".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-object_model_data-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-object_model_data-clone"></a><div class="section">
+<h3 id="object-model-data-clone-"><code>object_model_data$clone()</code><a class="anchor" aria-label="anchor" href="#object-model-data-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -622,6 +561,7 @@ By default the referential table <code>data("observe_logbook_program", package="
 </div>
 
 </div>
+
 
     </div>
 

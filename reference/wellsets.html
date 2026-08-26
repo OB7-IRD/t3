@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class wellsets</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/wellsets.R" class="external-link"><code>R/wellsets.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/wellsets.R" class="external-link"><code>R/wellsets.R</code></a></small>
     <div class="hidden name"><code>wellsets.Rd</code></div>
     </div>
 
@@ -82,35 +82,32 @@
 
     <div id="super-class">
     <h2>Super class</h2>
-    <p><code><a href="list_t3.html">t3::list_t3</a></code> -&gt; <code>wellsets</code></p>
+    <p><code><a href="list_t3.html">list_t3</a></code> -&gt; <code>wellsets</code></p>
     </div>
     <div id="methods">
     <h2>Methods</h2>
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-wellsets-new"><code>wellsets$new()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-wellsets-initialize"><code>wellsets$new()</code></a></p></li>
 <li><p><a href="#method-wellsets-add"><code>wellsets$add()</code></a></p></li>
 <li><p><a href="#method-wellsets-filter_by_trip"><code>wellsets$filter_by_trip()</code></a></p></li>
 <li><p><a href="#method-wellsets-clone"><code>wellsets$clone()</code></a></p></li>
-</ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href="list_t3.html#method-count"><code>t3::list_t3$count()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href="list_t3.html#method-extract"><code>t3::list_t3$extract()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href="list_t3.html#method-extract_l1_element_value"><code>t3::list_t3$extract_l1_element_value()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href="list_t3.html#method-filter"><code>t3::list_t3$filter()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href="list_t3.html#method-filter_l1"><code>t3::list_t3$filter_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href="list_t3.html#method-modification_l1"><code>t3::list_t3$modification_l1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href="list_t3.html#method-name"><code>t3::list_t3$name()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href="list_t3.html#method-remove"><code>t3::list_t3$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href="list_t3.html#method-view"><code>t3::list_t3$view()</code></a></span></li>
-</ul></details></p><hr><a id="method-wellsets-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+</ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href="list_t3.html#method-count"><code>list_t3$count()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href="list_t3.html#method-extract"><code>list_t3$extract()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href="list_t3.html#method-extract_l1_element_value"><code>list_t3$extract_l1_element_value()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href="list_t3.html#method-filter"><code>list_t3$filter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href="list_t3.html#method-filter_l1"><code>list_t3$filter_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href="list_t3.html#method-modification_l1"><code>list_t3$modification_l1()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href="list_t3.html#method-name"><code>list_t3$name()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href="list_t3.html#method-remove"><code>list_t3$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href="list_t3.html#method-view"><code>list_t3$view()</code></a></span></li>
+</ul></details></p><hr><a id="method-wellsets-initialize"></a><div class="section">
+<h3 id="wellsets-new-"><code>wellsets$new()</code><a class="anchor" aria-label="anchor" href="#wellsets-new-"></a></h3>
 <p>Initialize function for R6 wellsets class.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/wellsets.html">wellsets</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>(empty, list or R6-wellset classes) Nothing, a list of object R6-wellset classes or one object R6-wellset classes.</p></dd>
@@ -119,14 +116,14 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-wellsets-add"></a><div class="section">
-<h3 id="method-add-">Method <code>add()</code><a class="anchor" aria-label="anchor" href="#method-add-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-wellsets-add"></a><div class="section">
+<h3 id="wellsets-add-"><code>wellsets$add()</code><a class="anchor" aria-label="anchor" href="#wellsets-add-"></a></h3>
 <p>Function for add a new wellset in the object wellsets.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">wellsets</span><span class="op">$</span><span class="fu">add</span><span class="op">(</span><span class="va">new_item</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>new_item</code></dt>
 <dd><p>(list or R6-wellset classes) A list of object R6-wellset classes or one object R6-wellset classes.</p></dd>
@@ -135,14 +132,14 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-wellsets-filter_by_trip"></a><div class="section">
-<h3 id="method-filter-by-trip-">Method <code>filter_by_trip()</code><a class="anchor" aria-label="anchor" href="#method-filter-by-trip-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-wellsets-filter_by_trip"></a><div class="section">
+<h3 id="wellsets-filter-by-trip-"><code>wellsets$filter_by_trip()</code><a class="anchor" aria-label="anchor" href="#wellsets-filter-by-trip-"></a></h3>
 <p>Function for filter wellsets by trip identification.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">wellsets</span><span class="op">$</span><span class="fu">filter_by_trip</span><span class="op">(</span><span class="va">trip_id</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>trip_id</code></dt>
 <dd><p>(character) Trip identification.</p></dd>
@@ -151,14 +148,14 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-wellsets-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-wellsets-clone"></a><div class="section">
+<h3 id="wellsets-clone-"><code>wellsets$clone()</code><a class="anchor" aria-label="anchor" href="#wellsets-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">wellsets</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -168,6 +165,7 @@
 </div>
 
 </div>
+
 
     </div>
 

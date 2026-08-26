@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class elementarylanding</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/elementarylanding.R" class="external-link"><code>R/elementarylanding.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/elementarylanding.R" class="external-link"><code>R/elementarylanding.R</code></a></small>
     <div class="hidden name"><code>elementarylanding.Rd</code></div>
     </div>
 
@@ -85,11 +85,10 @@
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-elementarylanding-new"><code>elementarylanding$new()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-elementarylanding-initialize"><code>elementarylanding$new()</code></a></p></li>
 <li><p><a href="#method-elementarylanding-clone"><code>elementarylanding$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-elementarylanding-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+</ul></div><p></p><hr><a id="method-elementarylanding-initialize"></a><div class="section">
+<h3 id="elementarylanding-new-"><code>elementarylanding$new()</code><a class="anchor" aria-label="anchor" href="#elementarylanding-new-"></a></h3>
 <p>Initialize function for R6 elementarylanding class.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/elementarylanding.html">elementarylanding</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -100,45 +99,38 @@
 <span>  <span class="va">species_fao_code</span>,</span>
 <span>  <span class="va">landing_weight</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>trip_id</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Trip identification.</p></dd>
 
-
-<dt><code>elementarylanding_id</code></dt>
+      <dt><code>elementarylanding_id</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Elementary landing identification.</p></dd>
 
-
-<dt><code>weight_category_code</code></dt>
+      <dt><code>weight_category_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Logbook weight category.</p></dd>
 
-
-<dt><code>weight_category_label</code></dt>
+      <dt><code>weight_category_label</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Logbook category name identification.</p></dd>
 
-
-<dt><code>species_fao_code</code></dt>
+      <dt><code>species_fao_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Species code identification on 3 characters.</p></dd>
 
-
-<dt><code>landing_weight</code></dt>
+      <dt><code>landing_weight</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a> expected. Landing weight in tonnes.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-elementarylanding-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-elementarylanding-clone"></a><div class="section">
+<h3 id="elementarylanding-clone-"><code>elementarylanding$clone()</code><a class="anchor" aria-label="anchor" href="#elementarylanding-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">elementarylanding</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -148,6 +140,7 @@
 </div>
 
 </div>
+
 
     </div>
 

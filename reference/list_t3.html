@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class list_t3</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/list_t3.R" class="external-link"><code>R/list_t3.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/list_t3.R" class="external-link"><code>R/list_t3.R</code></a></small>
     <div class="hidden name"><code>list_t3.Rd</code></div>
     </div>
 
@@ -85,8 +85,7 @@
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-list_t3-new"><code>list_t3$new()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-list_t3-initialize"><code>list_t3$new()</code></a></p></li>
 <li><p><a href="#method-list_t3-name"><code>list_t3$name()</code></a></p></li>
 <li><p><a href="#method-list_t3-add"><code>list_t3$add()</code></a></p></li>
 <li><p><a href="#method-list_t3-remove"><code>list_t3$remove()</code></a></p></li>
@@ -98,22 +97,21 @@
 <li><p><a href="#method-list_t3-extract_l1_element_value"><code>list_t3$extract_l1_element_value()</code></a></p></li>
 <li><p><a href="#method-list_t3-modification_l1"><code>list_t3$modification_l1()</code></a></p></li>
 <li><p><a href="#method-list_t3-clone"><code>list_t3$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-list_t3-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+</ul></div><p></p><hr><a id="method-list_t3-initialize"></a><div class="section">
+<h3 id="list-t-new-"><code>list_t3$new()</code><a class="anchor" aria-label="anchor" href="#list-t-new-"></a></h3>
 <p>Initialize function for R6 list_t3 class.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/list_t3.html">list_t3</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-list_t3-name"></a><div class="section">
-<h3 id="method-name-">Method <code>name()</code><a class="anchor" aria-label="anchor" href="#method-name-"></a></h3>
+<p></p><hr><a id="method-list_t3-name"></a><div class="section">
+<h3 id="list-t-name-"><code>list_t3$name()</code><a class="anchor" aria-label="anchor" href="#list-t-name-"></a></h3>
 <p>Function for display item's name(s) attribut.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">name</span><span class="op">(</span>attribut <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut</code></dt>
 <dd><p>(character) Display all names with "all" attribut or specify one.</p></dd>
@@ -122,78 +120,74 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-add"></a><div class="section">
-<h3 id="method-add-">Method <code>add()</code><a class="anchor" aria-label="anchor" href="#method-add-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-add"></a><div class="section">
+<h3 id="list-t-add-"><code>list_t3$add()</code><a class="anchor" aria-label="anchor" href="#list-t-add-"></a></h3>
 <p>Function for add new element in specific attribut.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">add</span><span class="op">(</span><span class="va">new_item</span>, attribut <span class="op">=</span> <span class="st">"data"</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>new_item</code></dt>
 <dd><p>(all type) Item to add.</p></dd>
 
-
-<dt><code>attribut</code></dt>
+      <dt><code>attribut</code></dt>
 <dd><p>(character) Attribut's name. By default "data".</p></dd>
 
-
-<dt><code>silent</code></dt>
+      <dt><code>silent</code></dt>
 <dd><p><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> expected. By default TRUE Display or not information when you run the process.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-remove"></a><div class="section">
-<h3 id="method-remove-">Method <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove()</a></code><a class="anchor" aria-label="anchor" href="#method-remove-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-remove"></a><div class="section">
+<h3 id="list-t-remove-"><code>list_t3$remove()</code><a class="anchor" aria-label="anchor" href="#list-t-remove-"></a></h3>
 <p>Function for removed element of specific attribut.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">remove</span><span class="op">(</span><span class="va">item_id</span>, attribut <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>item_id</code></dt>
 <dd><p>(numeric) Identification number of item to remove.</p></dd>
 
-
-<dt><code>attribut</code></dt>
+      <dt><code>attribut</code></dt>
 <dd><p>(character) Attribut's name. By default "data".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-view"></a><div class="section">
-<h3 id="method-view-">Method <code>view()</code><a class="anchor" aria-label="anchor" href="#method-view-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-view"></a><div class="section">
+<h3 id="list-t-view-"><code>list_t3$view()</code><a class="anchor" aria-label="anchor" href="#list-t-view-"></a></h3>
 <p>Function for display element(s) of specific attribut.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">view</span><span class="op">(</span><span class="va">...</span>, attribut <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>(list) Identification number or name of item(s) to display.</p></dd>
 
-
-<dt><code>attribut</code></dt>
+      <dt><code>attribut</code></dt>
 <dd><p>(character) Attribut's name. By default "data".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-count"></a><div class="section">
-<h3 id="method-count-">Method <code>count()</code><a class="anchor" aria-label="anchor" href="#method-count-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-count"></a><div class="section">
+<h3 id="list-t-count-"><code>list_t3$count()</code><a class="anchor" aria-label="anchor" href="#list-t-count-"></a></h3>
 <p>Function for display number of elements of a specific attribut.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">count</span><span class="op">(</span>attribut <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut</code></dt>
 <dd><p>(character) Attribut's name. By default "data".</p></dd>
@@ -202,126 +196,118 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-extract"></a><div class="section">
-<h3 id="method-extract-">Method <code>extract()</code><a class="anchor" aria-label="anchor" href="#method-extract-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-extract"></a><div class="section">
+<h3 id="list-t-extract-"><code>list_t3$extract()</code><a class="anchor" aria-label="anchor" href="#list-t-extract-"></a></h3>
 <p>Function for extract element(s) of a specific attribut.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">extract</span><span class="op">(</span>attribut_l1 <span class="op">=</span> <span class="st">"data"</span>, attribut_l2 <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut_l1</code></dt>
 <dd><p>(character) First strate attribut's name. By default "data".</p></dd>
 
-
-<dt><code>attribut_l2</code></dt>
+      <dt><code>attribut_l2</code></dt>
 <dd><p>(character or NULL) Second strate attribut's name. By default NULL.</p></dd>
 
-
-<dt><code>id</code></dt>
+      <dt><code>id</code></dt>
 <dd><p>(integer) Number identification of element in the attribut.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-filter"></a><div class="section">
-<h3 id="method-filter-">Method <code><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter()</a></code><a class="anchor" aria-label="anchor" href="#method-filter-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-filter"></a><div class="section">
+<h3 id="list-t-filter-"><code>list_t3$filter()</code><a class="anchor" aria-label="anchor" href="#list-t-filter-"></a></h3>
 <p>Function for select attribut's element(s) by specific filter.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span>attribut_l1 <span class="op">=</span> <span class="st">"data"</span>, <span class="va">filter</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut_l1</code></dt>
 <dd><p>(character) First strate attribut's name. By default "data".</p></dd>
 
-
-<dt><code>filter</code></dt>
+      <dt><code>filter</code></dt>
 <dd><p>(character) Filter by a specific filter.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-filter_l1"></a><div class="section">
-<h3 id="method-filter-l-">Method <code>filter_l1()</code><a class="anchor" aria-label="anchor" href="#method-filter-l-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-filter_l1"></a><div class="section">
+<h3 id="list-t-filter-l-"><code>list_t3$filter_l1()</code><a class="anchor" aria-label="anchor" href="#list-t-filter-l-"></a></h3>
 <p>Function for select item(s) by specific selection.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">filter_l1</span><span class="op">(</span>attribut_l1 <span class="op">=</span> <span class="st">"data"</span>, <span class="va">filter</span>, clone <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut_l1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. First strate attribut's name. By default "data".</p></dd>
 
-
-<dt><code>filter</code></dt>
+      <dt><code>filter</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" &amp; $path$activity_id == "activity168""</p></dd>
 
-
-<dt><code>clone</code></dt>
+      <dt><code>clone</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. TRUE if you want to create a new object (not link to the original object).</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-extract_l1_element_value"></a><div class="section">
-<h3 id="method-extract-l-element-value-">Method <code>extract_l1_element_value()</code><a class="anchor" aria-label="anchor" href="#method-extract-l-element-value-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-extract_l1_element_value"></a><div class="section">
+<h3 id="list-t-extract-l-element-value-"><code>list_t3$extract_l1_element_value()</code><a class="anchor" aria-label="anchor" href="#list-t-extract-l-element-value-"></a></h3>
 <p>Function for extract element(s) of a specific attribut.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">extract_l1_element_value</span><span class="op">(</span>attribut_l1 <span class="op">=</span> <span class="st">"data"</span>, <span class="va">element</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut_l1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. First strate attribut's name. By default "data".</p></dd>
 
-
-<dt><code>element</code></dt>
+      <dt><code>element</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Name of the element.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-modification_l1"></a><div class="section">
-<h3 id="method-modification-l-">Method <code>modification_l1()</code><a class="anchor" aria-label="anchor" href="#method-modification-l-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-modification_l1"></a><div class="section">
+<h3 id="list-t-modification-l-"><code>list_t3$modification_l1()</code><a class="anchor" aria-label="anchor" href="#list-t-modification-l-"></a></h3>
 <p>Function for modification item(s).</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">modification_l1</span><span class="op">(</span>attribut_l1 <span class="op">=</span> <span class="st">"data"</span>, <span class="va">modification</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>attribut_l1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. First strate attribut's name. By default "data".</p></dd>
 
-
-<dt><code>modification</code></dt>
+      <dt><code>modification</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"</p></dd>
 
-
-<dt><code>silent</code></dt>
+      <dt><code>silent</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. Display outputs of modificated values.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-list_t3-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-list_t3-clone"></a><div class="section">
+<h3 id="list-t-clone-"><code>list_t3$clone()</code><a class="anchor" aria-label="anchor" href="#list-t-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">list_t3</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -331,6 +317,7 @@
 </div>
 
 </div>
+
 
     </div>
 

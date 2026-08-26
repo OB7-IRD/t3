@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class activity</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/activity.R" class="external-link"><code>R/activity.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/activity.R" class="external-link"><code>R/activity.R</code></a></small>
     <div class="hidden name"><code>activity.Rd</code></div>
     </div>
 
@@ -85,11 +85,10 @@
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-activity-new"><code>activity$new()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-activity-initialize"><code>activity$new()</code></a></p></li>
 <li><p><a href="#method-activity-clone"><code>activity$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-activity-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+</ul></div><p></p><hr><a id="method-activity-initialize"></a><div class="section">
+<h3 id="activity-new-"><code>activity$new()</code><a class="anchor" aria-label="anchor" href="#activity-new-"></a></h3>
 <p>Initialize function for R6 activities class.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/activity.html">activity</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -112,85 +111,65 @@
 <span>  <span class="va">objectoperation_id</span>,</span>
 <span>  <span class="va">elementarycatches</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>trip_id</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Trip identification (unique topiaid from database).</p></dd>
 
-
-<dt><code>activity_id</code></dt>
+      <dt><code>activity_id</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Activity identification (unique topiaid from database).</p></dd>
 
-
-<dt><code>ocean_code</code></dt>
+      <dt><code>ocean_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Ocean identification for the activity.</p></dd>
 
-
-<dt><code>activity_date</code></dt>
+      <dt><code>activity_date</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Activity date in format year month day.</p></dd>
 
-
-<dt><code>activity_number</code></dt>
+      <dt><code>activity_number</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Activity number.</p></dd>
 
-
-<dt><code>activity_latitude</code></dt>
+      <dt><code>activity_latitude</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a> expected. Latitude, in decimal degree, of the activity.</p></dd>
 
-
-<dt><code>activity_longitude</code></dt>
+      <dt><code>activity_longitude</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a> expected. Longitude, in decimal degree, of the activity.</p></dd>
 
-
-<dt><code>time_at_sea</code></dt>
+      <dt><code>time_at_sea</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Time at sea in hours.</p></dd>
 
-
-<dt><code>set_count</code></dt>
+      <dt><code>set_count</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Number of set associated to the activity.</p></dd>
 
-
-<dt><code>set_success_status_code</code></dt>
+      <dt><code>set_success_status_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Code status of the set.</p></dd>
 
-
-<dt><code>set_success_status_label</code></dt>
+      <dt><code>set_success_status_label</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Label status of the set.</p></dd>
 
-
-<dt><code>school_type_code</code></dt>
+      <dt><code>school_type_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. School type identification.</p></dd>
 
-
-<dt><code>activity_code</code></dt>
+      <dt><code>activity_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Activity code identification.</p></dd>
 
-
-<dt><code>activity_label</code></dt>
+      <dt><code>activity_label</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Activity identification.</p></dd>
 
-
-<dt><code>objectoperation_code</code></dt>
+      <dt><code>objectoperation_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Operation(s) on floating object(s) code(s) identification, comma-separated if more than one.</p></dd>
 
-
-<dt><code>objectoperation_label</code></dt>
+      <dt><code>objectoperation_label</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Operation(s) on floating object(s) identification, comma-separated if more than one.</p></dd>
 
-
-<dt><code>objectoperation_id</code></dt>
+      <dt><code>objectoperation_id</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Floating object(s) identification (unique topiaid from database), comma-separated if more than one.</p></dd>
 
-
-<dt><code>elementarycatches</code></dt>
+      <dt><code>elementarycatches</code></dt>
 <dd><p>Object of type <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> or <a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a> with elementarycatch(es) data expected for catch activities and NULL for other activities (default).</p></dd>
 
 
 </dl><p></p></div>
-</div>
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
 <p>Mandatory column names and types of elementarycatch(es) data:</p><ul><li><p>elementarycatch_id:  Elementary catch identification (class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a>).</p></li>
 <li><p>ocean_code:  Ocean identification (class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a>).</p></li>
@@ -203,17 +182,17 @@
 <li><p>species_fate_code:  Species fate code identification (class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a>).</p></li>
 <li><p>catch_weight: Catch weight in tonnes (class <a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a>).</p></li>
 <li><p>catch_count: Catch count in number of specimens caught (class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a>).</p></li>
-</ul></div>
+</ul><p></p>
+</div>
 
+</div>
 
-</div><p></p><hr><a id="method-activity-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p></p><hr><a id="method-activity-clone"></a><div class="section">
+<h3 id="activity-clone-"><code>activity$clone()</code><a class="anchor" aria-label="anchor" href="#activity-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">activity</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -223,6 +202,7 @@
 </div>
 
 </div>
+
 
     </div>
 

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class trip</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/trip.R" class="external-link"><code>R/trip.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/trip.R" class="external-link"><code>R/trip.R</code></a></small>
     <div class="hidden name"><code>trip.Rd</code></div>
     </div>
 
@@ -85,11 +85,10 @@
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-trip-new"><code>trip$new()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-trip-initialize"><code>trip$new()</code></a></p></li>
 <li><p><a href="#method-trip-clone"><code>trip$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-trip-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+</ul></div><p></p><hr><a id="method-trip-initialize"></a><div class="section">
+<h3 id="trip-new-"><code>trip$new()</code><a class="anchor" aria-label="anchor" href="#trip-new-"></a></h3>
 <p>Initialize function for R6 trip class.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/trip.html">trip</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -103,57 +102,47 @@
 <span>  <span class="va">vessel_type_code</span>,</span>
 <span>  <span class="va">ocean_code</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>trip_id</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Trip identification.</p></dd>
 
-
-<dt><code>flag_code</code></dt>
+      <dt><code>flag_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Fleet identification.</p></dd>
 
-
-<dt><code>departure_date</code></dt>
+      <dt><code>departure_date</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Departure date in format year month day hour minute second.</p></dd>
 
-
-<dt><code>trip_end_date</code></dt>
+      <dt><code>trip_end_date</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Landing date in format ymd UTC.</p></dd>
 
-
-<dt><code>logbook_availability_code</code></dt>
+      <dt><code>logbook_availability_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Logbook availability value, 1 for available and 0 for not.</p></dd>
 
-
-<dt><code>landing_well_content_code</code></dt>
+      <dt><code>landing_well_content_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Inform if the fish hold empty at the end of the trip, 1 for yes and 0 for not.</p></dd>
 
-
-<dt><code>vessel_code</code></dt>
+      <dt><code>vessel_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Vessel identification.</p></dd>
 
-
-<dt><code>vessel_type_code</code></dt>
+      <dt><code>vessel_type_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Vessel type identification.</p></dd>
 
-
-<dt><code>ocean_code</code></dt>
+      <dt><code>ocean_code</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Ocean identification for the trip.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-trip-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-trip-clone"></a><div class="section">
+<h3 id="trip-clone-"><code>trip$clone()</code><a class="anchor" aria-label="anchor" href="#trip-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">trip</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -163,6 +152,7 @@
 </div>
 
 </div>
+
 
     </div>
 
