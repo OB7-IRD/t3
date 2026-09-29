@@ -1,3 +1,11 @@
+# t3 4.0.3 - 2026-08-27
+
+## Changed
+
+- Add activity_date in step 2.6 outputs
+- Change column sample_category label in "-10 kg" instead of "-10kg" and "+10 kg" instead of "+10kg", to facilitate matching with Observe and Balbalya 2.0 referential.
+- Standardize column name between levels 1, 2 and level3 outputs : species_fao_code in level 3.
+
 # t3 4.0.2 - 2026-08-26
 
 ## Changed

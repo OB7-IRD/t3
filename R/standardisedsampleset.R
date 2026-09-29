@@ -9,6 +9,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @description Initialize function for R6 standardisedsampleset class.
                                     #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
                                     #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
+                                    #' @param activity_date Object of class {\link[base]{character}} expected. Activity date in format year month day.
                                     #' @param school_type_code Object of class {\link[base]{character}} expected. School type identification.
                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
                                     #' For the Observe database, the topiaid field from the table ps_logbook.well of the database is used;
@@ -26,6 +27,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @param sample_category Object of class {\link[base]{character}} expected. Sample category: -10kg or +10kg.
                                     initialize = function(trip_id,
                                                           activity_id,
+                                                          activity_date,
                                                           school_type_code,
                                                           well_id,
                                                           well_id_source,
@@ -43,6 +45,9 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = activity_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = activity_date,
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = school_type_code,
@@ -84,6 +89,11 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                       # 2 - Attributions ----
                                       private$trip_id <- trip_id
                                       private$activity_id <- activity_id
+                                      private$activity_date <- lubridate::parse_date_time(activity_date,
+                                                                                          orders = c("ymd_HMS",
+                                                                                                     "ymd"),
+                                                                                          tz = "UTC",
+                                                                                          quiet = TRUE)
                                       private$school_type_code <- school_type_code
                                       private$well_id <- well_id
                                       private$well_id_source <- well_id_source
@@ -100,6 +110,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                   private = list(
                                     trip_id = NULL,
                                     activity_id = NULL,
+                                    activity_date = NULL,
                                     school_type_code = NULL,
                                     well_id = NULL,
                                     well_id_source = NULL,

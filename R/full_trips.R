@@ -4714,7 +4714,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
                                                                                                     sum_weighted_weight))
                                           } else {
-                                            ### Case of no well plan recored -------
+                                            ### Case of no well plan recorded -------
                                             # no well plan available for the current well
                                             warning(format(Sys.time(),
                                                            "%Y-%m-%d %H:%M:%S"),
@@ -5368,8 +5368,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                collapse = " - "),
                                                         "]")
                                               }
+                                              current_activity_id <- current_well_set$.__enclos_env__$private$activity_id
+                                              current_activity_date <- as.character(current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                            current_activity_id,
+                                                                                                            "\""))[[1]]$.__enclos_env__$private$activity_date)
                                               current_standardised_samples_sets <- standardisedsampleset$new(trip_id = current_well_set$.__enclos_env__$private$trip_id,
                                                                                                              activity_id = current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                             activity_date = current_activity_date,
                                                                                                              school_type_code = current_well_set$.__enclos_env__$private$school_type_code,
                                                                                                              well_id = current_well_set$.__enclos_env__$private$well_id,
                                                                                                              well_id_source = current_well_set$.__enclos_env__$private$well_id_source,
@@ -5385,8 +5390,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              sample_weight_unit = lwr,
                                                                                                              sample_category = ifelse(is.na(lwr), NA_character_,
                                                                                                                                       ifelse(test = lwr <= 10,
-                                                                                                                                             yes = "- 10kg",
-                                                                                                                                             no = "+ 10kg")))
+                                                                                                                                             yes = "-10kg",
+                                                                                                                                             no = "+10kg")))
                                               capture.output(standardised_samples_sets$add(new_item = current_standardised_samples_sets),
                                                              file = "NUL")
                                             }
@@ -5468,6 +5473,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "well_id_source" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id_source")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                           "activity_date" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_date")),
                                                                                            "school_type_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                            "sample_id" =  dplyr::tibble("sample_id_ori"= standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")) %>%
                                                                                              dplyr::rowwise() %>%
