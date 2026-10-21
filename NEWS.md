@@ -1,3 +1,9 @@
+# t3 4.0.3 - 2026-10-21
+
+## Changed
+
+Adapt t3 queries to Observe v10 : table ps_logbook.wellcontentstatus became ps_common.wellcontentstatus.
+
 # t3 4.0.2 - 2026-08-26
 
 ## Changed

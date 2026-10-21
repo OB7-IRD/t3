@@ -41,7 +41,7 @@ from
 	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	join ps_common.acquisitionstatus acqs on (t.logbookacquisitionstatus = acqs.topiaid)
-	left join ps_logbook.wellcontentstatus w on (t.landingwellcontentstatus = w.topiaid)
+	left join ps_common.wellcontentstatus w on (t.landingwellcontentstatus = w.topiaid)
 	left join ps_common.program prog on (t.logbookprogram = prog.topiaid)
 where
 	t.topiaid in (?trip_ids)
