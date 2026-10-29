@@ -11,7 +11,7 @@
 --                                 vessel_type_codes (integer),
 --                                 observe_logbook_program_codes (character).
 --
--- Supported data models: 9.3 - 9.5
+-- Supported data models: 10.0.5-
 --
 -- Author: M.Depetris
 -- Date: 2024-02-09
@@ -19,6 +19,7 @@
 -- Updates:
 -- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
 -- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+-- 2026-10-22 - J.Clément - Change ps_logbook.wellcontentstatus to ps_common.wellcontentstatus.
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
